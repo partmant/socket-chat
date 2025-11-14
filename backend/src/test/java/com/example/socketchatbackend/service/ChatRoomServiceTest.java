@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.example.socketchatbackend.dto.ChatRoomRequest;
+import com.example.socketchatbackend.repository.ChatRoomRepository;
+
 @DisplayName("채팅방 생성 기능")
 class ChatRoomServiceTest {
 
