@@ -13,7 +13,7 @@ public class ChatRoom {
     private final String password;
     private final Integer maxUserCount;
 
-    public ChatRoom(Long id, String title, String password, Integer maxUserCount) {
+    private ChatRoom(Long id, String title, String password, Integer maxUserCount) {
         validateTitle(title);
         validatePassword(password);
         validateMaxUserCount(maxUserCount);
@@ -22,6 +22,10 @@ public class ChatRoom {
         this.title = title;
         this.password = password;
         this.maxUserCount = maxUserCount;
+    }
+
+    public static ChatRoom of(Long id, String title, String password, Integer maxUserCount) {
+        return new ChatRoom(id, title, password, maxUserCount);
     }
 
     private void validateTitle(String title) {

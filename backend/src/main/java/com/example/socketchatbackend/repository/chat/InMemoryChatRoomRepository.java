@@ -11,7 +11,7 @@ public class InMemoryChatRoomRepository implements ChatRoomRepository {
 
     @Override
     public ChatRoom save(String title, String password, Integer maxUserCount) {
-        ChatRoom room = new ChatRoom(++sequence, title, password, maxUserCount);
+        ChatRoom room = ChatRoom.of(++sequence, title, password, maxUserCount);
         store.put(room.getId(), room);
         return room;
     }
