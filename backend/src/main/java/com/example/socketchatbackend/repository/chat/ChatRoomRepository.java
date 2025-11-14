@@ -1,18 +1,12 @@
 package com.example.socketchatbackend.repository.chat;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
 import com.example.socketchatbackend.doamin.chat.ChatRoom;
 
-public class ChatRoomRepository {
-
-    private final Map<Long, ChatRoom> store = new HashMap<>();
-    private long sequence = 0L;
-
-    public ChatRoom save(String title, String password, Integer maxUserCount) {
-        ChatRoom chatRoom = new ChatRoom(++sequence, title, password, maxUserCount);
-        store.put(chatRoom.getId(), chatRoom);
-        return chatRoom;
-    }
+public interface ChatRoomRepository {
+    ChatRoom save(String title, String password, Integer maxUserCount);
+    Optional<ChatRoom> findById(Long id);
+    List<ChatRoom> findAll();
 }
