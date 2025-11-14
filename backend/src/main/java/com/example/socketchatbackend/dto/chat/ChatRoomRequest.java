@@ -1,4 +1,4 @@
-package com.example.socketchatbackend.dto;
+package com.example.socketchatbackend.dto.chat;
 
 import lombok.Getter;
 

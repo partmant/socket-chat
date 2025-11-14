@@ -1,4 +1,4 @@
-package com.example.socketchatbackend.doamin;
+package com.example.socketchatbackend.doamin.chat;
 
 public class ChatRoom {
 

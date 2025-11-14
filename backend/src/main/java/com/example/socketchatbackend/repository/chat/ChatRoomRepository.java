@@ -1,9 +1,9 @@
-package com.example.socketchatbackend.repository;
-
-import com.example.socketchatbackend.doamin.ChatRoom;
+package com.example.socketchatbackend.repository.chat;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.example.socketchatbackend.doamin.chat.ChatRoom;
 
 public class ChatRoomRepository {
 

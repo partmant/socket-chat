@@ -1,8 +1,8 @@
-package com.example.socketchatbackend.service;
+package com.example.socketchatbackend.service.chat;
 
-import com.example.socketchatbackend.doamin.ChatRoom;
-import com.example.socketchatbackend.dto.ChatRoomRequest;
-import com.example.socketchatbackend.repository.ChatRoomRepository;
+import com.example.socketchatbackend.doamin.chat.ChatRoom;
+import com.example.socketchatbackend.dto.chat.ChatRoomRequest;
+import com.example.socketchatbackend.repository.chat.ChatRoomRepository;
 
 public class ChatRoomService {
 
