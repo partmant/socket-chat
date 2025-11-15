@@ -73,4 +73,12 @@ public class ChatRoom {
     public String getTitle() {
         return title;
     }
+
+    public Integer getMaxUserCount() {
+        return maxUserCount;
+    }
+
+    public boolean hasPassword() {
+        return password != null && !password.isBlank();
+    }
 }
