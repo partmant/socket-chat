@@ -12,7 +12,7 @@ public class InMemoryChatRoomRepository implements ChatRoomRepository {
     @Override
     public ChatRoom save(String title, String password, Integer maxUserCount) {
         ChatRoom room = ChatRoom.of(++sequence, title, password, maxUserCount);
-        store.put(room.getId(), room);
+        store.put(room.id(), room);
         return room;
     }
 
@@ -29,6 +29,6 @@ public class InMemoryChatRoomRepository implements ChatRoomRepository {
     @Override
     public boolean existsByTitle(String title) {
         return store.values().stream()
-                .anyMatch(room -> room.getTitle().equals(title));
+                .anyMatch(room -> room.title().equals(title));
     }
 }

@@ -18,17 +18,17 @@ public class ChatRoomService {
     }
 
     public Long create(ChatRoomRequest request) {
-        if (chatRoomRepository.existsByTitle(request.getTitle())) {
+        if (chatRoomRepository.existsByTitle(request.title())) {
             throw new IllegalArgumentException(TITLE_DUPLICATION.getMessage());
         }
 
         ChatRoom chatRoom = chatRoomRepository.save(
-                request.getTitle(),
-                request.getPassword(),
-                request.getMaxUserCount()
+                request.title(),
+                request.password(),
+                request.maxUserCount()
         );
 
-        return chatRoom.getId();
+        return chatRoom.id();
     }
 
     public List<ChatRoomInfoResponse> findAll(String keyword) {
@@ -44,6 +44,6 @@ public class ChatRoomService {
         if (keyword == null || keyword.isBlank()) {
             return true;
         }
-        return room.getTitle().contains(keyword);
+        return room.title().contains(keyword);
     }
 }
