@@ -3,6 +3,9 @@ package com.example.socketchatbackend.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import static com.example.socketchatbackend.constraint.ChatConstraints.*;
+import static com.example.socketchatbackend.exception.ChatErrorMessages.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,14 +23,7 @@ class ChatRoomServiceTest {
     private static final String VALID_PASSWORD = "1234";
     private static final int VALID_MAX_USER_COUNT = 10;
 
-    private static final int MAX_TITLE_LENGTH = 50;
     private static final String EMPTY_TITLE = "";
-
-    private static final int MIN_PASSWORD_LENGTH = 4;
-    private static final int MAX_PASSWORD_LENGTH = 10;
-
-    private static final int MIN_ALLOWED_USER_COUNT = 1;
-    private static final int MAX_ALLOWED_USER_COUNT = 10;
 
     private ChatRoomService chatRoomService;
 
@@ -43,7 +39,7 @@ class ChatRoomServiceTest {
 
         assertThatThrownBy(() -> chatRoomService.create(req))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("제목 값이 유효하지 않습니다.");
+                .hasMessageContaining(TITLE_NULL.getMessage());
     }
 
     @Test
@@ -53,7 +49,7 @@ class ChatRoomServiceTest {
 
         assertThatThrownBy(() -> chatRoomService.create(req))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("제목 값이 유효하지 않습니다.");
+                .hasMessageContaining(TITLE_BLANK.getMessage());
     }
 
     @ParameterizedTest
@@ -65,7 +61,7 @@ class ChatRoomServiceTest {
 
         assertThatThrownBy(() -> chatRoomService.create(req))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("제목 길이가 유효하지 않습니다.");
+                .hasMessageContaining(TITLE_LENGTH_EXCEEDED.getMessage());
     }
 
     @ParameterizedTest
@@ -77,7 +73,7 @@ class ChatRoomServiceTest {
 
         assertThatThrownBy(() -> chatRoomService.create(req))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("비밀번호 길이가 유효하지 않습니다.");
+                .hasMessageContaining(PASSWORD_LENGTH_EXCEEDED.getMessage());
     }
 
     @ParameterizedTest
@@ -88,7 +84,7 @@ class ChatRoomServiceTest {
 
         assertThatThrownBy(() -> chatRoomService.create(req))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("최대 인원 값이 유효하지 않습니다.");
+                .hasMessageContaining(MAX_USER_COUNT_EXCEEDED.getMessage());
     }
 
     @Test

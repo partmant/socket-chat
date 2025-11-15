@@ -1,12 +1,9 @@
 package com.example.socketchatbackend.doamin.chat;
 
-public class ChatRoom {
+import static com.example.socketchatbackend.constraint.ChatConstraints.*;
+import static com.example.socketchatbackend.exception.ChatErrorMessages.*;
 
-    private static final int MAX_TITLE_LENGTH = 50;
-    private static final int MIN_PASSWORD_LENGTH = 4;
-    private static final int MAX_PASSWORD_LENGTH = 10;
-    private static final int MIN_ALLOWED_USER_COUNT = 1;
-    private static final int MAX_ALLOWED_USER_COUNT = 10;
+public class ChatRoom {
 
     private final Long id;
     private final String title;
@@ -29,11 +26,26 @@ public class ChatRoom {
     }
 
     private void validateTitle(String title) {
-        if (title == null || title.isBlank()) {
-            throw new IllegalArgumentException("제목 값이 유효하지 않습니다.");
+        validateTitleNotNull(title);
+        validateTitleNotBlank(title);
+        validateTitleLength(title);
+    }
+
+    private void validateTitleNotNull(String title) {
+        if (title == null) {
+            throw new IllegalArgumentException(TITLE_NULL.getMessage());
         }
+    }
+
+    private void validateTitleNotBlank(String title) {
+        if (title.isBlank()) {
+            throw new IllegalArgumentException(TITLE_BLANK.getMessage());
+        }
+    }
+
+    private void validateTitleLength(String title) {
         if (title.length() > MAX_TITLE_LENGTH) {
-            throw new IllegalArgumentException("제목 길이가 유효하지 않습니다.");
+            throw new IllegalArgumentException(TITLE_LENGTH_EXCEEDED.getMessage());
         }
     }
 
@@ -42,7 +54,7 @@ public class ChatRoom {
             return;
         }
         if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
-            throw new IllegalArgumentException("비밀번호 길이가 유효하지 않습니다.");
+            throw new IllegalArgumentException(PASSWORD_LENGTH_EXCEEDED.getMessage());
         }
     }
 
@@ -50,7 +62,7 @@ public class ChatRoom {
         if (maxUserCount == null ||
                 maxUserCount < MIN_ALLOWED_USER_COUNT ||
                 maxUserCount > MAX_ALLOWED_USER_COUNT) {
-            throw new IllegalArgumentException("최대 인원 값이 유효하지 않습니다.");
+            throw new IllegalArgumentException(MAX_USER_COUNT_EXCEEDED.getMessage());
         }
     }
 
