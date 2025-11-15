@@ -1,20 +1,20 @@
 package com.example.socketchatbackend.service.chat;
 
-import static com.example.socketchatbackend.exception.chat.ChatErrorMessages.*;
+import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
-import com.example.socketchatbackend.domain.chat.ChatRoom;
-import com.example.socketchatbackend.repository.chat.ChatRoomRepository;
+import com.example.socketchatbackend.domain.chat.Room;
+import com.example.socketchatbackend.repository.chat.RoomRepository;
 
 public class RoomEntranceService {
 
-    private final ChatRoomRepository chatRoomRepository;
+    private final RoomRepository roomRepository;
 
-    public RoomEntranceService(ChatRoomRepository chatRoomRepository) {
-        this.chatRoomRepository = chatRoomRepository;
+    public RoomEntranceService(RoomRepository roomRepository) {
+        this.roomRepository = roomRepository;
     }
 
     public void validateEnter(Long id, String password) {
-        ChatRoom room = chatRoomRepository.findById(id)
+        Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(ROOM_NOT_FOUND.getMessage()));
 
         if (!room.hasPassword()) return;

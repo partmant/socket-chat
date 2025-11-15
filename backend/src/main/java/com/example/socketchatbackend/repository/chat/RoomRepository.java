@@ -1,0 +1,17 @@
+package com.example.socketchatbackend.repository.chat;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.example.socketchatbackend.domain.chat.Room;
+
+public interface RoomRepository {
+
+    Room save(Room room);
+
+    Optional<Room> findById(Long id);
+
+    List<Room> findAll();
+
+    boolean existsByTitle(String title);
+}

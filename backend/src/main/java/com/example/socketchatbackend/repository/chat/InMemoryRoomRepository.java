@@ -2,17 +2,17 @@ package com.example.socketchatbackend.repository.chat;
 
 import java.util.*;
 
-import com.example.socketchatbackend.domain.chat.ChatRoom;
+import com.example.socketchatbackend.domain.chat.Room;
 
-public class InMemoryChatRoomRepository implements ChatRoomRepository {
+public class InMemoryRoomRepository implements RoomRepository {
 
-    private final Map<Long, ChatRoom> store = new HashMap<>();
+    private final Map<Long, Room> store = new HashMap<>();
     private long sequence = 0L;
 
     @Override
-    public ChatRoom save(ChatRoom chatRoom) {
+    public Room save(Room room) {
         long newId = ++sequence;
-        ChatRoom savedRoom = chatRoom.withId(newId);
+        Room savedRoom = room.withId(newId);
 
         store.put(newId, savedRoom);
 
@@ -20,12 +20,12 @@ public class InMemoryChatRoomRepository implements ChatRoomRepository {
     }
 
     @Override
-    public Optional<ChatRoom> findById(Long id) {
+    public Optional<Room> findById(Long id) {
         return Optional.ofNullable(store.get(id));
     }
 
     @Override
-    public List<ChatRoom> findAll() {
+    public List<Room> findAll() {
         return new ArrayList<>(store.values());
     }
 

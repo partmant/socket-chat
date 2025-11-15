@@ -1,36 +1,36 @@
 package com.example.socketchatbackend.service.chat;
 
-import static com.example.socketchatbackend.exception.chat.ChatErrorMessages.*;
+import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 import java.util.List;
 
-import com.example.socketchatbackend.domain.chat.ChatRoom;
-import com.example.socketchatbackend.dto.chat.ChatRoomResponse;
-import com.example.socketchatbackend.repository.chat.ChatRoomRepository;
+import com.example.socketchatbackend.domain.chat.Room;
+import com.example.socketchatbackend.dto.chat.RoomResponse;
+import com.example.socketchatbackend.repository.chat.RoomRepository;
 
 public class RoomQueryService {
 
-    private final ChatRoomRepository chatRoomRepository;
+    private final RoomRepository roomRepository;
 
-    public RoomQueryService(ChatRoomRepository chatRoomRepository) {
-        this.chatRoomRepository = chatRoomRepository;
+    public RoomQueryService(RoomRepository roomRepository) {
+        this.roomRepository = roomRepository;
     }
 
-    public List<ChatRoomResponse> findAll(String keyword) {
-        List<ChatRoom> rooms = chatRoomRepository.findAll();
+    public List<RoomResponse> findAll(String keyword) {
+        List<Room> rooms = roomRepository.findAll();
         return filterByKeyword(rooms, keyword).stream()
-                .map(ChatRoomResponse::from)
+                .map(RoomResponse::from)
                 .toList();
     }
 
-    public ChatRoomResponse findById(Long id) {
-        ChatRoom room = chatRoomRepository.findById(id)
+    public RoomResponse findById(Long id) {
+        Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(ROOM_NOT_FOUND.getMessage()));
 
-        return ChatRoomResponse.from(room);
+        return RoomResponse.from(room);
     }
 
-    private List<ChatRoom> filterByKeyword(List<ChatRoom> rooms, String keyword) {
+    private List<Room> filterByKeyword(List<Room> rooms, String keyword) {
         if (keyword == null || keyword.isBlank()) {
             return rooms;
         }

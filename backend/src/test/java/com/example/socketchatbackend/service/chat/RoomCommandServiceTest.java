@@ -2,14 +2,14 @@ package com.example.socketchatbackend.service.chat;
 
 import static org.assertj.core.api.Assertions.*;
 
-import static com.example.socketchatbackend.exception.chat.ChatErrorMessages.*;
+import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.example.socketchatbackend.dto.chat.ChatRoomRequest;
-import com.example.socketchatbackend.repository.chat.InMemoryChatRoomRepository;
+import com.example.socketchatbackend.dto.chat.RoomRequest;
+import com.example.socketchatbackend.repository.chat.InMemoryRoomRepository;
 
 class RoomCommandServiceTest {
 
@@ -21,14 +21,14 @@ class RoomCommandServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new RoomCommandService(new InMemoryChatRoomRepository());
+        service = new RoomCommandService(new InMemoryRoomRepository());
     }
 
     @Test
     @DisplayName("같은 제목의 방이 이미 존재하면 방을 생성할 수 없다.")
     void 같은_제목의_방이_존재하면_예외가_발생한다() {
-        ChatRoomRequest req1 = new ChatRoomRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT);
-        ChatRoomRequest req2 = new ChatRoomRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT);
+        RoomRequest req1 = new RoomRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT);
+        RoomRequest req2 = new RoomRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT);
 
         service.create(req1);
 
@@ -40,7 +40,7 @@ class RoomCommandServiceTest {
     @Test
     @DisplayName("유효한 입력이면 채팅방이 생성되고 ID가 반환된다.")
     void 유효한_입력이면_채팅방이_생성되고_ID가_반환된다() {
-        ChatRoomRequest req = new ChatRoomRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT);
+        RoomRequest req = new RoomRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT);
 
         Long id = service.create(req);
 

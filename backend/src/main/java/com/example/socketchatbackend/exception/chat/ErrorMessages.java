@@ -1,6 +1,6 @@
 package com.example.socketchatbackend.exception.chat;
 
-public enum ChatErrorMessages {
+public enum ErrorMessages {
 
     TITLE_NULL("방 제목은 null일 수 없습니다."),
     TITLE_BLANK("방 제목은 비어있거나 공백만으로 구성될 수 없습니다."),
@@ -16,7 +16,7 @@ public enum ChatErrorMessages {
 
     private final String message;
 
-    ChatErrorMessages(String message) {
+    ErrorMessages(String message) {
         this.message = message;
     }
 

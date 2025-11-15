@@ -1,22 +1,22 @@
 package com.example.socketchatbackend.domain.chat;
 
-import static com.example.socketchatbackend.constraint.chat.ChatConstraints.*;
-import static com.example.socketchatbackend.exception.chat.ChatErrorMessages.*;
+import static com.example.socketchatbackend.constraint.chat.RoomConstraints.*;
+import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
-public record ChatRoom(Long id, String title, String password, Integer maxUserCount) {
+public record Room(Long id, String title, String password, Integer maxUserCount) {
 
-    public ChatRoom {
+    public Room {
         validateTitle(title);
         validatePassword(password);
         validateMaxUserCount(maxUserCount);
     }
 
-    public static ChatRoom of(String title, String password, Integer maxUserCount) {
-        return new ChatRoom(null, title, password, maxUserCount);
+    public static Room of(String title, String password, Integer maxUserCount) {
+        return new Room(null, title, password, maxUserCount);
     }
 
-    public ChatRoom withId(Long id) {
-        return new ChatRoom(id, this.title, this.password, this.maxUserCount);
+    public Room withId(Long id) {
+        return new Room(id, this.title, this.password, this.maxUserCount);
     }
 
     private void validateTitle(String title) {

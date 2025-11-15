@@ -1,34 +1,34 @@
 package com.example.socketchatbackend.service.chat;
 
-import static com.example.socketchatbackend.exception.chat.ChatErrorMessages.*;
+import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
-import com.example.socketchatbackend.domain.chat.ChatRoom;
-import com.example.socketchatbackend.dto.chat.ChatRoomRequest;
-import com.example.socketchatbackend.repository.chat.ChatRoomRepository;
+import com.example.socketchatbackend.domain.chat.Room;
+import com.example.socketchatbackend.dto.chat.RoomRequest;
+import com.example.socketchatbackend.repository.chat.RoomRepository;
 
 public class RoomCommandService {
 
-    private final ChatRoomRepository chatRoomRepository;
+    private final RoomRepository roomRepository;
 
-    public RoomCommandService(ChatRoomRepository chatRoomRepository) {
-        this.chatRoomRepository = chatRoomRepository;
+    public RoomCommandService(RoomRepository roomRepository) {
+        this.roomRepository = roomRepository;
     }
 
-    public Long create(ChatRoomRequest request) {
+    public Long create(RoomRequest request) {
         validateDuplicateTitle(request.title());
 
-        ChatRoom chatRoom = ChatRoom.of(
+        Room room = Room.of(
                 request.title(),
                 request.password(),
                 request.maxUserCount()
         );
 
-        ChatRoom saved = chatRoomRepository.save(chatRoom);
+        Room saved = roomRepository.save(room);
         return saved.id();
     }
 
     private void validateDuplicateTitle(String title) {
-        if (chatRoomRepository.existsByTitle(title)) {
+        if (roomRepository.existsByTitle(title)) {
             throw new IllegalArgumentException(TITLE_DUPLICATION.getMessage());
         }
     }

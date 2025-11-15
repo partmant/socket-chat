@@ -2,7 +2,7 @@ package com.example.socketchatbackend.service.chat;
 
 import static org.assertj.core.api.Assertions.*;
 
-import static com.example.socketchatbackend.exception.chat.ChatErrorMessages.*;
+import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.example.socketchatbackend.dto.chat.ChatRoomRequest;
-import com.example.socketchatbackend.dto.chat.ChatRoomResponse;
-import com.example.socketchatbackend.repository.chat.InMemoryChatRoomRepository;
+import com.example.socketchatbackend.dto.chat.RoomRequest;
+import com.example.socketchatbackend.dto.chat.RoomResponse;
+import com.example.socketchatbackend.repository.chat.InMemoryRoomRepository;
 
 class RoomQueryServiceTest {
 
@@ -31,7 +31,7 @@ class RoomQueryServiceTest {
 
     @BeforeEach
     void setUp() {
-        InMemoryChatRoomRepository repo = new InMemoryChatRoomRepository();
+        InMemoryRoomRepository repo = new InMemoryRoomRepository();
         command = new RoomCommandService(repo);
         query = new RoomQueryService(repo);
     }
@@ -39,7 +39,7 @@ class RoomQueryServiceTest {
     @Test
     @DisplayName("생성된 방이 없으면 빈 목록을 반환한다.")
     void 생성된_방이_없으면_빈_목록을_반환한다() {
-        List<ChatRoomResponse> result = query.findAll(null);
+        List<RoomResponse> result = query.findAll(null);
         assertThat(result).isEmpty();
     }
 
@@ -48,10 +48,10 @@ class RoomQueryServiceTest {
     @ValueSource(strings = { "", " ", "\t", "\n" })
     @DisplayName("검색어가 없으면 전체 목록을 조회한다.")
     void 검색어가_없으면_전체_목록을_조회한다(String keyword) {
-        command.create(new ChatRoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
-        command.create(new ChatRoomRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        command.create(new RoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        command.create(new RoomRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
 
-        List<ChatRoomResponse> result = query.findAll(keyword);
+        List<RoomResponse> result = query.findAll(keyword);
 
         assertThat(result).hasSize(2);
         assertThat(result)
@@ -62,10 +62,10 @@ class RoomQueryServiceTest {
     @Test
     @DisplayName("검색어가 주어지면 제목에 검색어를 포함한 방만 조회된다.")
     void 검색어를_포함한_방만_조회된다() {
-        command.create(new ChatRoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
-        command.create(new ChatRoomRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        command.create(new RoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        command.create(new RoomRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
 
-        List<ChatRoomResponse> result = query.findAll("우테코");
+        List<RoomResponse> result = query.findAll("우테코");
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).title()).isEqualTo(TITLE_UTECO);
@@ -74,10 +74,10 @@ class RoomQueryServiceTest {
     @Test
     @DisplayName("검색 결과가 없으면 빈 목록을 반환한다.")
     void 검색_결과가_없으면_빈_목록을_반환한다() {
-        command.create(new ChatRoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
-        command.create(new ChatRoomRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        command.create(new RoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        command.create(new RoomRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
 
-        List<ChatRoomResponse> result = query.findAll(TITLE_NOT_EXIST);
+        List<RoomResponse> result = query.findAll(TITLE_NOT_EXIST);
 
         assertThat(result).isEmpty();
     }
@@ -93,8 +93,8 @@ class RoomQueryServiceTest {
     @Test
     @DisplayName("ID로 채팅방을 조회할 수 있다.")
     void ID로_채팅방을_조회할_수_있다() {
-        Long id = command.create(new ChatRoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
-        ChatRoomResponse res = query.findById(id);
+        Long id = command.create(new RoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        RoomResponse res = query.findById(id);
 
         assertThat(res.id()).isEqualTo(id);
         assertThat(res.title()).isEqualTo(TITLE_UTECO);
