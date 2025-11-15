@@ -52,6 +52,19 @@ class ChatRoomServiceTest {
                 .hasMessageContaining(TITLE_BLANK.getMessage());
     }
 
+    @Test
+    @DisplayName("같은 제목의 방이 이미 존재하면 예외가 발생한다")
+    void 같은_제목의_방이_존재하면_예외가_발생한다() {
+        ChatRoomRequest req1 = new ChatRoomRequest("room", "1234", 10);
+        ChatRoomRequest req2 = new ChatRoomRequest("room", "2222", 10);
+
+        chatRoomService.create(req1);
+
+        assertThatThrownBy(() -> chatRoomService.create(req2))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining(TITLE_DUPLICATION.getMessage());
+    }
+
     @ParameterizedTest
     @ValueSource(ints = {MAX_TITLE_LENGTH + 1, MAX_TITLE_LENGTH + 10})
     @DisplayName("제목 길이가 허용 범위를 초과하면 예외가 발생한다.")
