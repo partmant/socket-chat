@@ -18,32 +18,37 @@ public class ChatRoomService {
     }
 
     public Long create(ChatRoomRequest request) {
-        if (chatRoomRepository.existsByTitle(request.title())) {
-            throw new IllegalArgumentException(TITLE_DUPLICATION.getMessage());
-        }
+        validateDuplicateTitle(request.title());
 
-        ChatRoom chatRoom = chatRoomRepository.save(
+        ChatRoom chatRoom = ChatRoom.of(
                 request.title(),
                 request.password(),
                 request.maxUserCount()
         );
 
-        return chatRoom.id();
+        ChatRoom saved = chatRoomRepository.save(chatRoom);
+
+        return saved.id();
+    }
+
+    private void validateDuplicateTitle(String title) {
+        if (chatRoomRepository.existsByTitle(title)) {
+            throw new IllegalArgumentException(TITLE_DUPLICATION.getMessage());
+        }
     }
 
     public List<ChatRoomInfoResponse> findAll(String keyword) {
         List<ChatRoom> rooms = chatRoomRepository.findAll();
-
-        return rooms.stream()
-                .filter(room -> isKeywordMatch(room, keyword))
+        return filterByKeyword(rooms, keyword).stream()
                 .map(ChatRoomInfoResponse::from)
                 .toList();
     }
 
-    private boolean isKeywordMatch(ChatRoom room, String keyword) {
-        if (keyword == null || keyword.isBlank()) {
-            return true;
-        }
-        return room.title().contains(keyword);
+    private List<ChatRoom> filterByKeyword(List<ChatRoom> rooms, String keyword) {
+        if (keyword == null || keyword.isBlank()) return rooms;
+
+        return rooms.stream()
+                .filter(room -> room.title().contains(keyword))
+                .toList();
     }
 }

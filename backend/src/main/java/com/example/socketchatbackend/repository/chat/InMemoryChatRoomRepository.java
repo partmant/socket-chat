@@ -10,10 +10,13 @@ public class InMemoryChatRoomRepository implements ChatRoomRepository {
     private long sequence = 0L;
 
     @Override
-    public ChatRoom save(String title, String password, Integer maxUserCount) {
-        ChatRoom room = ChatRoom.of(++sequence, title, password, maxUserCount);
-        store.put(room.id(), room);
-        return room;
+    public ChatRoom save(ChatRoom chatRoom) {
+        long newId = ++sequence;
+        ChatRoom savedRoom = chatRoom.withId(newId);
+
+        store.put(newId, savedRoom);
+
+        return savedRoom;
     }
 
     @Override

@@ -11,8 +11,12 @@ public record ChatRoom(Long id, String title, String password, Integer maxUserCo
         validateMaxUserCount(maxUserCount);
     }
 
-    public static ChatRoom of(Long id, String title, String password, Integer maxUserCount) {
-        return new ChatRoom(id, title, password, maxUserCount);
+    public static ChatRoom of(String title, String password, Integer maxUserCount) {
+        return new ChatRoom(null, title, password, maxUserCount);
+    }
+
+    public ChatRoom withId(Long id) {
+        return new ChatRoom(id, this.title, this.password, this.maxUserCount);
     }
 
     private void validateTitle(String title) {

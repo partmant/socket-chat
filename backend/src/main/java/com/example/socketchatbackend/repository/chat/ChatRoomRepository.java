@@ -6,8 +6,12 @@ import java.util.Optional;
 import com.example.socketchatbackend.doamin.chat.ChatRoom;
 
 public interface ChatRoomRepository {
-    ChatRoom save(String title, String password, Integer maxUserCount);
+
+    ChatRoom save(ChatRoom chatRoom);
+
     Optional<ChatRoom> findById(Long id);
+
     List<ChatRoom> findAll();
+
     boolean existsByTitle(String title);
 }
