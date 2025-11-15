@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Test;
 import com.example.socketchatbackend.dto.chat.ChatRoomRequest;
 import com.example.socketchatbackend.repository.chat.InMemoryChatRoomRepository;
 import com.example.socketchatbackend.service.chat.ChatRoomService;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class ChatRoomServiceTest {
 
@@ -37,6 +40,52 @@ class ChatRoomServiceTest {
         assertThatThrownBy(() -> chatRoomService.create(req2))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(TITLE_DUPLICATION.getMessage());
+    }
+
+    @Test
+    @DisplayName("생성된 방이 없으면 빈 목록을 반환한다.")
+    void 생성된_방이_없으면_빈_목록을_반환한다() {
+        List<ChatRoomInfoResponse> result = chatRoomService.findAll(null);
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    @DisplayName("검색어가 주어지면 제목에 검색어를 포함한 방만 조회된다.")
+    void 검색어를_포함한_방만_조회된다() {
+        chatRoomService.create(new ChatRoomRequest("우테코 오픈 미션방", VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        chatRoomService.create(new ChatRoomRequest("코테 준비방", VALID_PASSWORD, VALID_MAX_USER_COUNT));
+
+        List<ChatRoomInfoResponse> result = chatRoomService.findAll("우테코");
+
+        assertThat(result).hasSize(1);
+        assertThat(result)
+                .extracting("title")
+                .containsExactlyInAnyOrder("우테코 오픈 미션방");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "", " ", "   ", "\t", "\n" })
+    @NullSource
+    @DisplayName("검색어가 없으면 전체 목록을 조회한다.")
+    void 검색어가_없으면_전체_목록을_조회한다(String keyword) {
+        chatRoomService.create(new ChatRoomRequest("우테코 오픈 미션방", VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        chatRoomService.create(new ChatRoomRequest("코테 준비방", VALID_PASSWORD, VALID_MAX_USER_COUNT));
+
+        List<ChatRoomInfoResponse> result = chatRoomService.findAll(keyword);
+
+        assertThat(result).hasSize(2);
+    }
+
+    @Test
+    @DisplayName("검색 결과가 없으면 빈 목록을 반환한다.")
+    void 검색_결과가_없으면_빈_목록을_반환한다() {
+        chatRoomService.create(new ChatRoomRequest("우테코 오픈 미션방", VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        chatRoomService.create(new ChatRoomRequest("코테 준비방", VALID_PASSWORD, VALID_MAX_USER_COUNT));
+
+        List<ChatRoomInfoResponse> result = chatRoomService.findAll("자바");
+
+        assertThat(result).isEmpty();
     }
 
     @Test
