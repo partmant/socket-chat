@@ -2,7 +2,7 @@ package com.example.socketchatbackend.repository.chat;
 
 import java.util.*;
 
-import com.example.socketchatbackend.doamin.chat.ChatRoom;
+import com.example.socketchatbackend.domain.chat.ChatRoom;
 
 public class InMemoryChatRoomRepository implements ChatRoomRepository {
 

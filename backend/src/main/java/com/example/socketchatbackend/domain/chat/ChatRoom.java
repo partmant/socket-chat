@@ -1,4 +1,4 @@
-package com.example.socketchatbackend.doamin.chat;
+package com.example.socketchatbackend.domain.chat;
 
 import static com.example.socketchatbackend.constraint.chat.ChatConstraints.*;
 import static com.example.socketchatbackend.exception.chat.ChatErrorMessages.*;

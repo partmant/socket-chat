@@ -4,8 +4,8 @@ import static com.example.socketchatbackend.exception.chat.ChatErrorMessages.*;
 
 import java.util.List;
 
-import com.example.socketchatbackend.doamin.chat.ChatRoom;
-import com.example.socketchatbackend.dto.chat.ChatRoomInfoResponse;
+import com.example.socketchatbackend.domain.chat.ChatRoom;
+import com.example.socketchatbackend.dto.chat.ChatRoomResponse;
 import com.example.socketchatbackend.dto.chat.ChatRoomRequest;
 import com.example.socketchatbackend.repository.chat.ChatRoomRepository;
 
@@ -37,10 +37,10 @@ public class ChatRoomService {
         }
     }
 
-    public List<ChatRoomInfoResponse> findAll(String keyword) {
+    public List<ChatRoomResponse> findAll(String keyword) {
         List<ChatRoom> rooms = chatRoomRepository.findAll();
         return filterByKeyword(rooms, keyword).stream()
-                .map(ChatRoomInfoResponse::from)
+                .map(ChatRoomResponse::from)
                 .toList();
     }
 
@@ -52,11 +52,11 @@ public class ChatRoomService {
                 .toList();
     }
 
-    public ChatRoomInfoResponse findById(Long id) {
+    public ChatRoomResponse findById(Long id) {
         ChatRoom room = chatRoomRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(ROOM_NOT_FOUND.getMessage()));
 
-        return ChatRoomInfoResponse.from(room);
+        return ChatRoomResponse.from(room);
     }
 
     public void validateEnter(Long id, String password) {

@@ -1,4 +1,4 @@
-package com.example.socketchatbackend.doamin.chat;
+package com.example.socketchatbackend.domain.chat;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

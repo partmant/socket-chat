@@ -13,7 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.example.socketchatbackend.dto.chat.ChatRoomInfoResponse;
+import com.example.socketchatbackend.dto.chat.ChatRoomResponse;
 import com.example.socketchatbackend.dto.chat.ChatRoomRequest;
 import com.example.socketchatbackend.repository.chat.InMemoryChatRoomRepository;
 import com.example.socketchatbackend.service.chat.ChatRoomService;
@@ -63,7 +63,7 @@ class ChatRoomServiceTest {
     @Test
     @DisplayName("생성된 방이 없으면 빈 목록을 반환한다.")
     void 생성된_방이_없으면_빈_목록을_반환한다() {
-        List<ChatRoomInfoResponse> result = chatRoomService.findAll(null);
+        List<ChatRoomResponse> result = chatRoomService.findAll(null);
 
         assertThat(result).isEmpty();
     }
@@ -76,7 +76,7 @@ class ChatRoomServiceTest {
         chatRoomService.create(new ChatRoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
         chatRoomService.create(new ChatRoomRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
 
-        List<ChatRoomInfoResponse> result = chatRoomService.findAll(keyword);
+        List<ChatRoomResponse> result = chatRoomService.findAll(keyword);
 
         assertThat(result).hasSize(2);
         assertThat(result)
@@ -90,7 +90,7 @@ class ChatRoomServiceTest {
         chatRoomService.create(new ChatRoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
         chatRoomService.create(new ChatRoomRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
 
-        List<ChatRoomInfoResponse> result = chatRoomService.findAll("우테코");
+        List<ChatRoomResponse> result = chatRoomService.findAll("우테코");
 
         assertThat(result).hasSize(1);
         assertThat(result)
@@ -104,7 +104,7 @@ class ChatRoomServiceTest {
         chatRoomService.create(new ChatRoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
         chatRoomService.create(new ChatRoomRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
 
-        List<ChatRoomInfoResponse> result = chatRoomService.findAll(TITLE_NOT_EXIST);
+        List<ChatRoomResponse> result = chatRoomService.findAll(TITLE_NOT_EXIST);
 
         assertThat(result).isEmpty();
     }
@@ -123,7 +123,7 @@ class ChatRoomServiceTest {
     void ID로_채팅방을_조회할_수_있다() {
         Long id = chatRoomService.create(new ChatRoomRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
 
-        ChatRoomInfoResponse response = chatRoomService.findById(id);
+        ChatRoomResponse response = chatRoomService.findById(id);
 
         assertThat(response.id()).isEqualTo(id);
         assertThat(response.title()).isEqualTo(VALID_TITLE);

@@ -3,7 +3,7 @@ package com.example.socketchatbackend.repository.chat;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.socketchatbackend.doamin.chat.ChatRoom;
+import com.example.socketchatbackend.domain.chat.ChatRoom;
 
 public interface ChatRoomRepository {
 
