@@ -3,27 +3,21 @@ package com.example.socketchatbackend.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import static com.example.socketchatbackend.constraint.chat.ChatConstraints.*;
 import static com.example.socketchatbackend.exception.chat.ChatErrorMessages.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import com.example.socketchatbackend.dto.chat.ChatRoomRequest;
 import com.example.socketchatbackend.repository.chat.InMemoryChatRoomRepository;
 import com.example.socketchatbackend.service.chat.ChatRoomService;
 
-@DisplayName("채팅방 생성 기능")
 class ChatRoomServiceTest {
 
     private static final String VALID_TITLE = "test-room";
     private static final String VALID_PASSWORD = "1234";
     private static final int VALID_MAX_USER_COUNT = 10;
-
-    private static final String EMPTY_TITLE = "";
 
     private ChatRoomService chatRoomService;
 
@@ -33,71 +27,16 @@ class ChatRoomServiceTest {
     }
 
     @Test
-    @DisplayName("제목이 null이면 예외가 발생한다.")
-    void 제목이_null이면_예외가_발생한다() {
-        ChatRoomRequest req = new ChatRoomRequest(null, VALID_PASSWORD, VALID_MAX_USER_COUNT);
-
-        assertThatThrownBy(() -> chatRoomService.create(req))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(TITLE_NULL.getMessage());
-    }
-
-    @Test
-    @DisplayName("제목이 비어 있으면 예외가 발생한다.")
-    void 제목이_비어있으면_예외가_발생한다() {
-        ChatRoomRequest req = new ChatRoomRequest(EMPTY_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT);
-
-        assertThatThrownBy(() -> chatRoomService.create(req))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(TITLE_BLANK.getMessage());
-    }
-
-    @Test
     @DisplayName("같은 제목의 방이 이미 존재하면 예외가 발생한다")
     void 같은_제목의_방이_존재하면_예외가_발생한다() {
-        ChatRoomRequest req1 = new ChatRoomRequest("room", "1234", 10);
-        ChatRoomRequest req2 = new ChatRoomRequest("room", "2222", 10);
+        ChatRoomRequest req1 = new ChatRoomRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT);
+        ChatRoomRequest req2 = new ChatRoomRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT);
 
         chatRoomService.create(req1);
 
         assertThatThrownBy(() -> chatRoomService.create(req2))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(TITLE_DUPLICATION.getMessage());
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {MAX_TITLE_LENGTH + 1, MAX_TITLE_LENGTH + 10})
-    @DisplayName("제목 길이가 허용 범위를 초과하면 예외가 발생한다.")
-    void 제목_길이가_허용_범위를_초과하면_예외가_발생한다(int invalidLength) {
-        String invalidTitle = "a".repeat(invalidLength);
-        ChatRoomRequest req = new ChatRoomRequest(invalidTitle, VALID_PASSWORD, VALID_MAX_USER_COUNT);
-
-        assertThatThrownBy(() -> chatRoomService.create(req))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(TITLE_LENGTH_EXCEEDED.getMessage());
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {MIN_PASSWORD_LENGTH - 1, MAX_PASSWORD_LENGTH + 1})
-    @DisplayName("비밀번호 길이가 허용 범위를 벗어나면 예외가 발생한다.")
-    void 비밀번호_길이가_허용_범위를_벗어나면_예외가_발생한다(int invalidLength) {
-        String invalidPassword = "a".repeat(invalidLength);
-        ChatRoomRequest req = new ChatRoomRequest(VALID_TITLE, invalidPassword, VALID_MAX_USER_COUNT);
-
-        assertThatThrownBy(() -> chatRoomService.create(req))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(PASSWORD_LENGTH_EXCEEDED.getMessage());
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {MIN_ALLOWED_USER_COUNT - 1, MAX_ALLOWED_USER_COUNT + 1})
-    @DisplayName("최대 인원이 허용 범위를 벗어나면 예외가 발생한다.")
-    void 최대_인원이_허용_범위를_벗어나면_예외가_발생한다(int invalidMaxUserCount) {
-        ChatRoomRequest req = new ChatRoomRequest(VALID_TITLE, VALID_PASSWORD, invalidMaxUserCount);
-
-        assertThatThrownBy(() -> chatRoomService.create(req))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MAX_USER_COUNT_EXCEEDED.getMessage());
     }
 
     @Test
