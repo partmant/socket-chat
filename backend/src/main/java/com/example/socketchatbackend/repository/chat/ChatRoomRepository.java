@@ -9,4 +9,5 @@ public interface ChatRoomRepository {
     ChatRoom save(String title, String password, Integer maxUserCount);
     Optional<ChatRoom> findById(Long id);
     List<ChatRoom> findAll();
+    boolean existsByTitle(String title);
 }

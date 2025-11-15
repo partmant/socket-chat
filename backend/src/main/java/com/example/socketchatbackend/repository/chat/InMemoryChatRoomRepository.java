@@ -25,4 +25,10 @@ public class InMemoryChatRoomRepository implements ChatRoomRepository {
     public List<ChatRoom> findAll() {
         return new ArrayList<>(store.values());
     }
+
+    @Override
+    public boolean existsByTitle(String title) {
+        return store.values().stream()
+                .anyMatch(room -> room.getTitle().equals(title));
+    }
 }

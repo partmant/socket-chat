@@ -1,7 +1,7 @@
 package com.example.socketchatbackend.doamin.chat;
 
-import static com.example.socketchatbackend.constraint.ChatConstraints.*;
-import static com.example.socketchatbackend.exception.ChatErrorMessages.*;
+import static com.example.socketchatbackend.constraint.chat.ChatConstraints.*;
+import static com.example.socketchatbackend.exception.chat.ChatErrorMessages.*;
 
 public class ChatRoom {
 
@@ -68,5 +68,9 @@ public class ChatRoom {
 
     public Long getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

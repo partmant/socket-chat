@@ -3,8 +3,8 @@ package com.example.socketchatbackend.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import static com.example.socketchatbackend.constraint.ChatConstraints.*;
-import static com.example.socketchatbackend.exception.ChatErrorMessages.*;
+import static com.example.socketchatbackend.constraint.chat.ChatConstraints.*;
+import static com.example.socketchatbackend.exception.chat.ChatErrorMessages.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

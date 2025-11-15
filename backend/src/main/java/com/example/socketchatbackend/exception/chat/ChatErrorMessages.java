@@ -1,4 +1,4 @@
-package com.example.socketchatbackend.exception;
+package com.example.socketchatbackend.exception.chat;
 
 public enum ChatErrorMessages {
 
