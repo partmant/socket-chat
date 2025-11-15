@@ -1,7 +1,6 @@
 package com.example.socketchatbackend.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 import static com.example.socketchatbackend.exception.chat.ChatErrorMessages.*;
 
@@ -108,5 +107,53 @@ class ChatRoomServiceTest {
         List<ChatRoomInfoResponse> result = chatRoomService.findAll(TITLE_NOT_EXIST);
 
         assertThat(result).isEmpty();
+    }
+
+    // 방 입장
+    @Test
+    @DisplayName("존재하지 않는 ID로 조회하면 예외가 발생한다.")
+    void 존재하지_않는_ID로_조회하면_예외가_발생한다() {
+        assertThatThrownBy(() -> chatRoomService.findById(1L))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(ROOM_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    @DisplayName("ID로 채팅방을 조회할 수 있다.")
+    void ID로_채팅방을_조회할_수_있다() {
+        Long id = chatRoomService.create(new ChatRoomRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+
+        ChatRoomInfoResponse response = chatRoomService.findById(id);
+
+        assertThat(response.id()).isEqualTo(id);
+        assertThat(response.title()).isEqualTo(VALID_TITLE);
+    }
+
+    @DisplayName("비밀번호가 설정되지 않은 방은 비밀번호 없이 입장 가능하다.")
+    @Test
+    void 비밀번호_설정이_없으면_입장한다() {
+        Long id = chatRoomService.create(new ChatRoomRequest(VALID_TITLE, null, VALID_MAX_USER_COUNT));
+
+        assertThatCode(() -> chatRoomService.validateEnter(id, null))
+                .doesNotThrowAnyException();
+    }
+
+    @DisplayName("비밀번호가 틀리면 예외가 발생한다.")
+    @Test
+    void 비밀번호가_유효하지_않으면_예외가_발생한다() {
+        Long id = chatRoomService.create(new ChatRoomRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+
+        assertThatThrownBy(() -> chatRoomService.validateEnter(id, "wrong"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(INVALID_PASSWORD.getMessage());
+    }
+
+    @DisplayName("비밀번호가 맞으면 정상적으로 입장할 수 있다.")
+    @Test
+    void 유효한_비밀번호이면_입장한다() {
+        Long id = chatRoomService.create(new ChatRoomRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+
+        assertThatCode(() -> chatRoomService.validateEnter(id, VALID_PASSWORD))
+                .doesNotThrowAnyException();
     }
 }
