@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.example.socketchatbackend.dto.chat.RoomEnterRequest;
 import com.example.socketchatbackend.dto.chat.RoomRequest;
 import com.example.socketchatbackend.dto.chat.RoomResponse;
 import com.example.socketchatbackend.service.chat.RoomCommandService;
