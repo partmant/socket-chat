@@ -1,66 +1,52 @@
 package com.example.socketchatbackend.domain.chat;
 
-import static com.example.socketchatbackend.constraint.chat.RoomConstraints.*;
+import com.example.socketchatbackend.domain.chat.vo.RoomCapacity;
+import com.example.socketchatbackend.domain.chat.vo.RoomPassword;
+import com.example.socketchatbackend.domain.chat.vo.RoomTitle;
+
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
-public record Room(Long id, String title, String password, Integer maxUserCount) {
+public record Room(Long id, RoomTitle title, RoomPassword password, RoomCapacity capacity) {
 
     public Room {
-        validateTitle(title);
-        validatePassword(password);
-        validateMaxUserCount(maxUserCount);
-    }
-
-    public static Room of(String title, String password, Integer maxUserCount) {
-        return new Room(null, title, password, maxUserCount);
-    }
-
-    public Room withId(Long id) {
-        return new Room(id, this.title, this.password, this.maxUserCount);
-    }
-
-    private void validateTitle(String title) {
-        validateTitleNotNull(title);
-        validateTitleNotBlank(title);
-        validateTitleLength(title);
-    }
-
-    private void validateTitleNotNull(String title) {
         if (title == null) {
             throw new IllegalArgumentException(TITLE_NULL.getMessage());
         }
-    }
-
-    private void validateTitleNotBlank(String title) {
-        if (title.isBlank()) {
-            throw new IllegalArgumentException(TITLE_BLANK.getMessage());
-        }
-    }
-
-    private void validateTitleLength(String title) {
-        if (title.length() > MAX_TITLE_LENGTH) {
-            throw new IllegalArgumentException(TITLE_LENGTH_EXCEEDED.getMessage());
-        }
-    }
-
-    private void validatePassword(String password) {
         if (password == null) {
+            throw new IllegalArgumentException(PASSWORD_NULL.getMessage());
+        }
+        if (capacity == null) {
+            throw new IllegalArgumentException(CAPACITY_NULL.getMessage());
+        }
+    }
+
+    public static Room of(RoomTitle title, RoomPassword password, RoomCapacity capacity) {
+        return new Room(null, title, password, capacity);
+    }
+
+    public Room withId(Long newId) {
+        return new Room(newId, this.title, this.password, this.capacity);
+    }
+
+    public void verifyPassword(String input) {
+        if (!password.exists()) {   // 비밀번호 없는 방이면 입장
             return;
         }
-        if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
-            throw new IllegalArgumentException(PASSWORD_LENGTH_EXCEEDED.getMessage());
+
+        if (!password.matches(input)) {
+            throw new IllegalArgumentException(INVALID_PASSWORD.getMessage());
         }
     }
 
-    private void validateMaxUserCount(Integer maxUserCount) {
-        if (maxUserCount == null ||
-                maxUserCount < MIN_ALLOWED_USER_COUNT ||
-                maxUserCount > MAX_ALLOWED_USER_COUNT) {
-            throw new IllegalArgumentException(MAX_USER_COUNT_EXCEEDED.getMessage());
-        }
+    public boolean isFull(int currentUserCount) {
+        return capacity.isFull(currentUserCount);
+    }
+
+    public boolean canAccept(int currentUserCount) {
+        return capacity.canAccept(currentUserCount);
     }
 
     public boolean hasPassword() {
-        return password != null && !password.isBlank();
+        return password.exists();
     }
 }

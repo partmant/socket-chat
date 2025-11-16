@@ -3,6 +3,7 @@ package com.example.socketchatbackend.repository.chat;
 import java.util.*;
 
 import com.example.socketchatbackend.domain.chat.Room;
+import com.example.socketchatbackend.domain.chat.vo.RoomTitle;
 
 public class InMemoryRoomRepository implements RoomRepository {
 
@@ -30,8 +31,8 @@ public class InMemoryRoomRepository implements RoomRepository {
     }
 
     @Override
-    public boolean existsByTitle(String title) {
+    public boolean existsByTitle(RoomTitle title) {
         return store.values().stream()
-                .anyMatch(room -> room.title().equals(title));
+                .anyMatch(room -> room.title().value().equals(title.value()));
     }
 }

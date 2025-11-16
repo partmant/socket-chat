@@ -7,9 +7,9 @@ public record RoomResponse(Long id, String title, boolean hasPassword, int maxUs
     public static RoomResponse from(Room room) {
         return new RoomResponse(
                 room.id(),
-                room.title(),
+                room.title().value(),
                 room.hasPassword(),
-                room.maxUserCount()
+                room.capacity().value()
         );
     }
 }

@@ -35,7 +35,7 @@ public class RoomQueryService {
             return rooms;
         }
         return rooms.stream()
-                .filter(room -> room.title().contains(keyword))
+                .filter(room -> room.title().value().contains(keyword))
                 .toList();
     }
 }

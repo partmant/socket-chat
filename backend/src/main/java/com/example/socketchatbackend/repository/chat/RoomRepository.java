@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.socketchatbackend.domain.chat.Room;
+import com.example.socketchatbackend.domain.chat.vo.RoomTitle;
 
 public interface RoomRepository {
 
@@ -13,5 +14,5 @@ public interface RoomRepository {
 
     List<Room> findAll();
 
-    boolean existsByTitle(String title);
+    boolean existsByTitle(RoomTitle title);
 }
