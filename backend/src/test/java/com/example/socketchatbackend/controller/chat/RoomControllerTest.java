@@ -61,7 +61,7 @@ class RoomControllerTest {
         mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().string(String.valueOf(VALID_ID1)));
     }
 

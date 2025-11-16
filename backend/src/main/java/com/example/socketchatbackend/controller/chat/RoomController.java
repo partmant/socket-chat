@@ -1,16 +1,17 @@
 package com.example.socketchatbackend.controller.chat;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import com.example.socketchatbackend.dto.chat.RoomEnterRequest;
 import com.example.socketchatbackend.dto.chat.RoomRequest;
 import com.example.socketchatbackend.dto.chat.RoomResponse;
 import com.example.socketchatbackend.service.chat.RoomCommandService;
 import com.example.socketchatbackend.service.chat.RoomQueryService;
 import com.example.socketchatbackend.service.chat.RoomEntranceService;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/rooms")
@@ -32,7 +33,7 @@ public class RoomController {
     @PostMapping
     public ResponseEntity<Long> create(@RequestBody RoomRequest request) {
         Long id = commandService.create(request);
-        return ResponseEntity.ok(id);
+        return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
 
     // 방 목록 조회
