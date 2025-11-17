@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.socketchatbackend.dto.chat.message.ChatMessageRequest;
 import com.example.socketchatbackend.dto.chat.message.ChatMessageResponse;
+import com.example.socketchatbackend.dto.chat.message.MessageType;
 
 @Service
 public class MessageService {
@@ -16,11 +17,30 @@ public class MessageService {
     }
 
     public void broadcast(ChatMessageRequest req) {
-        ChatMessageResponse res = ChatMessageResponse.from(req);
+        ChatMessageResponse res = switch (req.type()) {
+            case ENTER -> createEnterMessage(req);
+            case QUIT -> createQuitMessage(req);
+            case TALK -> ChatMessageResponse.from(req);
+        };
 
-        messagingTemplate.convertAndSend(
-                "/topic/room/" + req.roomId(),
-                res
+        messagingTemplate.convertAndSend("/topic/room/" + req.roomId(), res);
+    }
+
+    private ChatMessageResponse createEnterMessage(ChatMessageRequest req) {
+        return new ChatMessageResponse(
+                req.roomId(),
+                MessageType.ENTER,
+                "SYSTEM",
+                req.sender() + "님이 입장했습니다."
+        );
+    }
+
+    private ChatMessageResponse createQuitMessage(ChatMessageRequest req) {
+        return new ChatMessageResponse(
+                req.roomId(),
+                MessageType.QUIT,
+                "SYSTEM",
+                req.sender() + "님이 퇴장했습니다."
         );
     }
 }
