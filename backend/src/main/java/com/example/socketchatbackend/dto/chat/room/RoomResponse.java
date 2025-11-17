@@ -1,4 +1,4 @@
-package com.example.socketchatbackend.dto.chat;
+package com.example.socketchatbackend.dto.chat.room;
 
 import com.example.socketchatbackend.domain.chat.Room;
 

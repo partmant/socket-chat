@@ -1,4 +1,4 @@
-package com.example.socketchatbackend.controller.chat;
+package com.example.socketchatbackend.controller.chat.room;
 
 import static org.mockito.BDDMockito.*;
 
@@ -18,12 +18,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.example.socketchatbackend.dto.chat.RoomEnterRequest;
-import com.example.socketchatbackend.dto.chat.RoomRequest;
-import com.example.socketchatbackend.dto.chat.RoomResponse;
-import com.example.socketchatbackend.service.chat.RoomCommandService;
-import com.example.socketchatbackend.service.chat.RoomQueryService;
-import com.example.socketchatbackend.service.chat.RoomEntranceService;
+import com.example.socketchatbackend.dto.chat.room.RoomEnterRequest;
+import com.example.socketchatbackend.dto.chat.room.RoomCreateRequest;
+import com.example.socketchatbackend.dto.chat.room.RoomResponse;
+import com.example.socketchatbackend.service.chat.room.RoomCommandService;
+import com.example.socketchatbackend.service.chat.room.RoomQueryService;
+import com.example.socketchatbackend.service.chat.room.RoomEntranceService;
 
 @WebMvcTest(RoomController.class)
 class RoomControllerTest {
@@ -55,8 +55,8 @@ class RoomControllerTest {
     @Test
     @DisplayName("방 생성 요청이 들어오면 생성된 방 ID를 반환한다")
     void 방_생성_요청이_들어오면_ID를_반환한다() throws Exception {
-        RoomRequest request = new RoomRequest(VALID_TITLE1, VALID_PASSWORD, VALID_MAX_USER_COUNT);
-        given(commandService.create(any(RoomRequest.class))).willReturn(VALID_ID1);
+        RoomCreateRequest request = new RoomCreateRequest(VALID_TITLE1, VALID_PASSWORD, VALID_MAX_USER_COUNT);
+        given(commandService.create(any(RoomCreateRequest.class))).willReturn(VALID_ID1);
 
         mockMvc.perform(post(BASE_URL)
                         .contentType(MediaType.APPLICATION_JSON)

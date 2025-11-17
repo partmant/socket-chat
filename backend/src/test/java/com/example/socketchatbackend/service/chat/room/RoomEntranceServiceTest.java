@@ -1,4 +1,4 @@
-package com.example.socketchatbackend.service.chat;
+package com.example.socketchatbackend.service.chat.room;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.example.socketchatbackend.dto.chat.RoomRequest;
+import com.example.socketchatbackend.dto.chat.room.RoomCreateRequest;
 import com.example.socketchatbackend.repository.chat.InMemoryRoomRepository;
 
 class RoomEntranceServiceTest {
@@ -30,7 +30,7 @@ class RoomEntranceServiceTest {
     @Test
     @DisplayName("비밀번호가 설정되지 않은 방은 비밀번호 없이 입장 가능하다.")
     void 비밀번호_설정이_없으면_입장한다() {
-        Long id = command.create(new RoomRequest(VALID_TITLE, null, VALID_MAX_USER_COUNT));
+        Long id = command.create(new RoomCreateRequest(VALID_TITLE, null, VALID_MAX_USER_COUNT));
 
         assertThatCode(() -> entrance.validateEnter(id, null))
                 .doesNotThrowAnyException();
@@ -39,7 +39,7 @@ class RoomEntranceServiceTest {
     @Test
     @DisplayName("비밀번호가 틀리면 예외가 발생한다.")
     void 비밀번호가_유효하지_않으면_예외가_발생한다() {
-        Long id = command.create(new RoomRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        Long id = command.create(new RoomCreateRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
 
         assertThatThrownBy(() -> entrance.validateEnter(id, "wrong"))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -49,7 +49,7 @@ class RoomEntranceServiceTest {
     @Test
     @DisplayName("비밀번호가 맞으면 정상적으로 입장할 수 있다.")
     void 유효한_비밀번호이면_입장한다() {
-        Long id = command.create(new RoomRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        Long id = command.create(new RoomCreateRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
 
         assertThatCode(() -> entrance.validateEnter(id, VALID_PASSWORD))
                 .doesNotThrowAnyException();

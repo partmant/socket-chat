@@ -1,4 +1,4 @@
-package com.example.socketchatbackend.service.chat;
+package com.example.socketchatbackend.service.chat.room;
 
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.ROOM_NOT_FOUND;
 

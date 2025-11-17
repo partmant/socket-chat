@@ -1,4 +1,4 @@
-package com.example.socketchatbackend.service.chat;
+package com.example.socketchatbackend.service.chat.room;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -13,8 +13,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.example.socketchatbackend.dto.chat.RoomRequest;
-import com.example.socketchatbackend.dto.chat.RoomResponse;
+import com.example.socketchatbackend.dto.chat.room.RoomCreateRequest;
+import com.example.socketchatbackend.dto.chat.room.RoomResponse;
 import com.example.socketchatbackend.repository.chat.InMemoryRoomRepository;
 
 class RoomQueryServiceTest {
@@ -48,8 +48,8 @@ class RoomQueryServiceTest {
     @ValueSource(strings = { "", " ", "\t", "\n" })
     @DisplayName("검색어가 없으면 전체 목록을 조회한다.")
     void 검색어가_없으면_전체_목록을_조회한다(String keyword) {
-        command.create(new RoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
-        command.create(new RoomRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        command.create(new RoomCreateRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        command.create(new RoomCreateRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
 
         List<RoomResponse> result = query.findAll(keyword);
 
@@ -62,8 +62,8 @@ class RoomQueryServiceTest {
     @Test
     @DisplayName("검색어가 주어지면 제목에 검색어를 포함한 방만 조회된다.")
     void 검색어를_포함한_방만_조회된다() {
-        command.create(new RoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
-        command.create(new RoomRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        command.create(new RoomCreateRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        command.create(new RoomCreateRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
 
         List<RoomResponse> result = query.findAll("우테코");
 
@@ -74,8 +74,8 @@ class RoomQueryServiceTest {
     @Test
     @DisplayName("검색 결과가 없으면 빈 목록을 반환한다.")
     void 검색_결과가_없으면_빈_목록을_반환한다() {
-        command.create(new RoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
-        command.create(new RoomRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        command.create(new RoomCreateRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        command.create(new RoomCreateRequest(TITLE_COTE, VALID_PASSWORD, VALID_MAX_USER_COUNT));
 
         List<RoomResponse> result = query.findAll(TITLE_NOT_EXIST);
 
@@ -93,7 +93,7 @@ class RoomQueryServiceTest {
     @Test
     @DisplayName("ID로 채팅방을 조회할 수 있다.")
     void ID로_채팅방을_조회할_수_있다() {
-        Long id = command.create(new RoomRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
+        Long id = command.create(new RoomCreateRequest(TITLE_UTECO, VALID_PASSWORD, VALID_MAX_USER_COUNT));
         RoomResponse res = query.findById(id);
 
         assertThat(res.id()).isEqualTo(id);

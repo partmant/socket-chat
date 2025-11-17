@@ -1,4 +1,4 @@
-package com.example.socketchatbackend.controller.chat;
+package com.example.socketchatbackend.controller.chat.room;
 
 import java.util.List;
 
@@ -6,12 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.socketchatbackend.dto.chat.RoomEnterRequest;
-import com.example.socketchatbackend.dto.chat.RoomRequest;
-import com.example.socketchatbackend.dto.chat.RoomResponse;
-import com.example.socketchatbackend.service.chat.RoomCommandService;
-import com.example.socketchatbackend.service.chat.RoomQueryService;
-import com.example.socketchatbackend.service.chat.RoomEntranceService;
+import com.example.socketchatbackend.dto.chat.room.RoomEnterRequest;
+import com.example.socketchatbackend.dto.chat.room.RoomCreateRequest;
+import com.example.socketchatbackend.dto.chat.room.RoomResponse;
+import com.example.socketchatbackend.service.chat.room.RoomCommandService;
+import com.example.socketchatbackend.service.chat.room.RoomQueryService;
+import com.example.socketchatbackend.service.chat.room.RoomEntranceService;
 
 @RestController
 @RequestMapping("/api/rooms")
@@ -31,7 +31,7 @@ public class RoomController {
 
     // 방 생성
     @PostMapping
-    public ResponseEntity<Long> create(@RequestBody RoomRequest request) {
+    public ResponseEntity<Long> create(@RequestBody RoomCreateRequest request) {
         Long id = commandService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }

@@ -1,11 +1,11 @@
-package com.example.socketchatbackend.service.chat;
+package com.example.socketchatbackend.service.chat.room;
 
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 import java.util.List;
 
 import com.example.socketchatbackend.domain.chat.Room;
-import com.example.socketchatbackend.dto.chat.RoomResponse;
+import com.example.socketchatbackend.dto.chat.room.RoomResponse;
 import com.example.socketchatbackend.repository.chat.RoomRepository;
 
 public class RoomQueryService {
