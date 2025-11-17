@@ -2,6 +2,8 @@ package com.example.socketchatbackend.service.chat.room;
 
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
+import org.springframework.stereotype.Service;
+
 import com.example.socketchatbackend.domain.chat.Room;
 import com.example.socketchatbackend.domain.chat.vo.RoomTitle;
 import com.example.socketchatbackend.domain.chat.vo.RoomPassword;
@@ -9,6 +11,7 @@ import com.example.socketchatbackend.domain.chat.vo.RoomCapacity;
 import com.example.socketchatbackend.dto.chat.room.RoomCreateRequest;
 import com.example.socketchatbackend.repository.chat.RoomRepository;
 
+@Service
 public class RoomCommandService {
 
     private final RoomRepository roomRepository;

@@ -2,9 +2,12 @@ package com.example.socketchatbackend.service.chat.room;
 
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.ROOM_NOT_FOUND;
 
+import org.springframework.stereotype.Service;
+
 import com.example.socketchatbackend.domain.chat.Room;
 import com.example.socketchatbackend.repository.chat.RoomRepository;
 
+@Service
 public class RoomEntranceService {
 
     private final RoomRepository roomRepository;

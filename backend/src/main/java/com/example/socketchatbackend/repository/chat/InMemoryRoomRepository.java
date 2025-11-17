@@ -2,9 +2,12 @@ package com.example.socketchatbackend.repository.chat;
 
 import java.util.*;
 
+import org.springframework.stereotype.Repository;
+
 import com.example.socketchatbackend.domain.chat.Room;
 import com.example.socketchatbackend.domain.chat.vo.RoomTitle;
 
+@Repository
 public class InMemoryRoomRepository implements RoomRepository {
 
     private final Map<Long, Room> store = new HashMap<>();

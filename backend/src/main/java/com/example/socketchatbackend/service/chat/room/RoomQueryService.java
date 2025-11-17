@@ -4,10 +4,14 @@ import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.example.socketchatbackend.domain.chat.Room;
 import com.example.socketchatbackend.dto.chat.room.RoomResponse;
 import com.example.socketchatbackend.repository.chat.RoomRepository;
 
+
+@Service
 public class RoomQueryService {
 
     private final RoomRepository roomRepository;
