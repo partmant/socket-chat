@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.example.socketchatbackend.dto.chat.message.ChatMessageRequest;
 import com.example.socketchatbackend.dto.chat.message.ChatMessageResponse;
 import com.example.socketchatbackend.dto.chat.message.MessageType;
+import com.example.socketchatbackend.util.ChatConstants;
 
 @Service
 public class MessageService {
@@ -30,8 +31,8 @@ public class MessageService {
         return new ChatMessageResponse(
                 req.roomId(),
                 MessageType.ENTER,
-                "SYSTEM",
-                req.sender() + "님이 입장했습니다."
+                ChatConstants.SYSTEM_SENDER,
+                String.format(ChatConstants.ENTER_MESSAGE_FORMAT, req.sender())
         );
     }
 
@@ -39,8 +40,8 @@ public class MessageService {
         return new ChatMessageResponse(
                 req.roomId(),
                 MessageType.QUIT,
-                "SYSTEM",
-                req.sender() + "님이 퇴장했습니다."
+                ChatConstants.SYSTEM_SENDER,
+                String.format(ChatConstants.QUIT_MESSAGE_FORMAT, req.sender())
         );
     }
 }
