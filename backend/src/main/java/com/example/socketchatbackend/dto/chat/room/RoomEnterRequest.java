@@ -1,3 +1,6 @@
 package com.example.socketchatbackend.dto.chat.room;
 
-public record RoomEnterRequest(String password) {}
+public record RoomEnterRequest(
+        String nickname,
+        String password
+) {}
