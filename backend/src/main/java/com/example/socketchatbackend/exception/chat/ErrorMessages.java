@@ -13,6 +13,7 @@ public enum ErrorMessages {
 
     CAPACITY_EXCEEDED("최대 인원 값이 허용 범위를 초과했습니다."),
     CAPACITY_NULL("허용 인원 수는 null일 수 없습니다."),
+    ROOM_FULL("방의 현재 정원이 가득 찼습니다."),
 
     NICKNAME_BLANK("닉네임은 비어있을 수 없습니다."),
     NICKNAME_NULL("닉네임은 null일 수 없습니다."),

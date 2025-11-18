@@ -34,7 +34,7 @@ public record Room(Long id, RoomTitle title, RoomPassword password, RoomCapacity
         }
 
         if (!password.matches(input)) {
-            throw new IllegalArgumentException(INVALID_PASSWORD.getMessage());
+            throw new IllegalArgumentException(PASSWORD_INCORRECT.getMessage());
         }
     }
 

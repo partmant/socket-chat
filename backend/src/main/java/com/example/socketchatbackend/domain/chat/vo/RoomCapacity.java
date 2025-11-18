@@ -10,7 +10,7 @@ public record RoomCapacity(int value) {
     }
 
     private void validateRange(int value) {
-        if (value < MIN_ALLOWED_USER_COUNT || value > MAX_ALLOWED_USER_COUNT) {
+        if (value < MIN_ALLOWED_CAPACITY || value > MAX_ALLOWED_CAPACITY) {
             throw new IllegalArgumentException(CAPACITY_EXCEEDED.getMessage());
         }
     }

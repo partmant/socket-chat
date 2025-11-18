@@ -75,7 +75,7 @@ class RoomTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {MIN_ALLOWED_USER_COUNT - 1, MAX_ALLOWED_USER_COUNT + 1})
+    @ValueSource(ints = {MIN_ALLOWED_CAPACITY - 1, MAX_ALLOWED_CAPACITY + 1})
     @DisplayName("최대 인원이 허용 범위를 벗어나면 예외가 발생한다.")
     void 최대_인원이_허용범위를_벗어나면_예외가_발생한다(int invalidCapacity) {
         assertThatThrownBy(() ->

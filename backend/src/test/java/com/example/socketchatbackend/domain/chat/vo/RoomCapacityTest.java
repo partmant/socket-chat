@@ -17,15 +17,15 @@ class RoomCapacityTest {
     @Test
     @DisplayName("허용된 최소값과 최대값 범위 내라면 RoomCapacity가 정상 생성된다.")
     void 허용된_범위라면_정상_생성된다() {
-        RoomCapacity min = new RoomCapacity(MIN_ALLOWED_USER_COUNT);
-        RoomCapacity max = new RoomCapacity(MAX_ALLOWED_USER_COUNT);
+        RoomCapacity min = new RoomCapacity(MIN_ALLOWED_CAPACITY);
+        RoomCapacity max = new RoomCapacity(MAX_ALLOWED_CAPACITY);
 
-        assertThat(min.value()).isEqualTo(MIN_ALLOWED_USER_COUNT);
-        assertThat(max.value()).isEqualTo(MAX_ALLOWED_USER_COUNT);
+        assertThat(min.value()).isEqualTo(MIN_ALLOWED_CAPACITY);
+        assertThat(max.value()).isEqualTo(MAX_ALLOWED_CAPACITY);
     }
 
     @ParameterizedTest
-    @ValueSource(ints = { MIN_ALLOWED_USER_COUNT - 1, MAX_ALLOWED_USER_COUNT + 1 })
+    @ValueSource(ints = { MIN_ALLOWED_CAPACITY - 1, MAX_ALLOWED_CAPACITY + 1 })
     @DisplayName("허용된 범위를 벗어나면 예외가 발생한다.")
     void 허용된_범위를_벗어나면_예외가_발생한다(int invalidValue) {
         assertThatThrownBy(() -> new RoomCapacity(invalidValue))
