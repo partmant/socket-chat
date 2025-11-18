@@ -3,7 +3,9 @@ package com.example.socketchatbackend.service.chat.room;
 import static org.assertj.core.api.Assertions.*;
 
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
+import static org.mockito.Mockito.*;
 
+import com.example.socketchatbackend.service.chat.message.MessageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,7 @@ class RoomEntranceServiceTest {
     private static final String INVALID_PASSWORD = "wrong";
     private static final int VALID_CAPACITY = 10;
 
+    private MessageService messageService;
     private RoomCommandService command;
     private RoomEntranceService entrance;
     private InMemoryRoomMemberRepository memberRepo;
@@ -34,7 +37,9 @@ class RoomEntranceServiceTest {
 
         command = new RoomCommandService(roomRepo);
 
-        entrance = new RoomEntranceService(roomRepo, memberRepo);
+        messageService = mock(MessageService.class);
+
+        entrance = new RoomEntranceService(roomRepo, memberRepo, messageService);
     }
 
     @Test
@@ -133,5 +138,17 @@ class RoomEntranceServiceTest {
         assertThatThrownBy(() -> entrance.enter(id, new RoomEnterRequest(VALID_NICKNAME + 2, null)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(ROOM_FULL.getMessage());
+    }
+
+    @Test
+    @DisplayName("입장 성공 시 입장 메시지를 브로드캐스트한다.")
+    void 입장_성공시_메시지를_호출한다() {
+        Long id = command.create(new RoomCreateRequest(VALID_TITLE, VALID_PASSWORD, VALID_CAPACITY));
+        RoomEnterRequest req = new RoomEnterRequest(VALID_NICKNAME, VALID_PASSWORD);
+
+        assertThatCode(() -> entrance.enter(id, req))
+                .doesNotThrowAnyException();
+
+        verify(messageService, times(1)).broadcast(any());
     }
 }

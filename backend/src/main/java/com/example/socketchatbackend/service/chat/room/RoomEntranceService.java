@@ -3,6 +3,9 @@ package com.example.socketchatbackend.service.chat.room;
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 import com.example.socketchatbackend.domain.chat.vo.RoomNickname;
+import com.example.socketchatbackend.dto.chat.message.ChatMessageRequest;
+import com.example.socketchatbackend.dto.chat.message.MessageType;
+import com.example.socketchatbackend.service.chat.message.MessageService;
 import org.springframework.stereotype.Service;
 
 import com.example.socketchatbackend.domain.chat.Room;
@@ -15,21 +18,38 @@ public class RoomEntranceService {
 
     private final RoomRepository roomRepository;
     private final RoomMemberRepository memberRepository;
+    private final MessageService messageService;
 
     public RoomEntranceService(RoomRepository roomRepository,
-                               RoomMemberRepository memberRepository) {
+                               RoomMemberRepository memberRepository,
+                               MessageService messageService) {
         this.roomRepository = roomRepository;
         this.memberRepository = memberRepository;
+        this.messageService = messageService;
     }
 
     public void enter(Long roomId, RoomEnterRequest request) {
+        // 1. 방 존재 + 비밀번호 검증
         Room room = verifyRoomAccessAndGetRoom(roomId, request.password());
 
+        // 2. 닉네임 검증 (VO에서 처리)
         RoomNickname nickname = new RoomNickname(request.nickname());
 
+        // 3. 중복 / 정원 초과 체크
         checkRoomEntrancePreconditions(room, nickname);
 
+        // 4. 저장소에 입장 처리
         memberRepository.add(roomId, nickname.value());
+
+        // 5. **입장 WebSocket 메시지 전송**
+        messageService.broadcast(
+                new ChatMessageRequest(
+                        roomId,
+                        MessageType.ENTER,
+                        nickname.value(),
+                        null
+                )
+        );
     }
 
     public Room verifyRoomAccessAndGetRoom(Long id, String password) {
