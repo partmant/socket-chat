@@ -53,7 +53,7 @@ public class RoomController {
     // 방 입장
     @PostMapping("/{id}/enter")
     public ResponseEntity<Void> enter(@PathVariable Long id, @RequestBody RoomEnterRequest request) {
-        entranceService.validateEnter(id, request.password());
+        entranceService.enter(id, request);
         return ResponseEntity.ok().build();
     }
 }

@@ -34,6 +34,7 @@ class RoomControllerTest {
     private static final long VALID_ID2 = 2L;
     private static final String VALID_TITLE1 = "test-room1";
     private static final String VALID_TITLE2 = "test-room2";
+    private static final String VALID_NAME = "test-userName";
     private static final String VALID_PASSWORD = "1234";
     private static final int VALID_MAX_USER_COUNT = 10;
 
@@ -100,8 +101,8 @@ class RoomControllerTest {
     @Test
     @DisplayName("비밀번호가 필요한 방에 올바른 비밀번호로 입장하면 성공한다")
     void 비밀번호가_필요한_방에_올바른_비밀번호로_입장하면_성공한다() throws Exception {
-        RoomEnterRequest request = new RoomEnterRequest(VALID_PASSWORD);
-        willDoNothing().given(entranceService).validateEnter(VALID_ID1, VALID_PASSWORD);
+        RoomEnterRequest request = new RoomEnterRequest(VALID_NAME, VALID_PASSWORD);
+        willDoNothing().given(entranceService).enter(VALID_ID1, request);
 
         mockMvc.perform(post(BASE_URL + "/" + VALID_ID1 + "/enter")
                         .contentType(MediaType.APPLICATION_JSON)

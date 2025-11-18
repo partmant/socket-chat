@@ -2,7 +2,12 @@ package com.example.socketchatbackend.dto.chat.room;
 
 import com.example.socketchatbackend.domain.chat.Room;
 
-public record RoomResponse(Long id, String title, boolean hasPassword, int maxUserCount) {
+public record RoomResponse(
+        Long id,
+        String title,
+        boolean hasPassword,
+        int capacity
+) {
 
     public static RoomResponse from(Room room) {
         return new RoomResponse(
