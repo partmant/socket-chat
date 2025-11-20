@@ -3,7 +3,7 @@ package com.example.socketchatbackend.service.chat.room;
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 import com.example.socketchatbackend.domain.chat.vo.RoomNickname;
-import com.example.socketchatbackend.dto.chat.message.ChatMessageRequest;
+import com.example.socketchatbackend.dto.chat.message.MessageRequest;
 import com.example.socketchatbackend.dto.chat.message.MessageType;
 import com.example.socketchatbackend.service.chat.message.MessageService;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class RoomEntranceService {
 
         // 5. **입장 WebSocket 메시지 전송**
         messageService.broadcast(
-                new ChatMessageRequest(
+                new MessageRequest(
                         roomId,
                         MessageType.ENTER,
                         nickname.value(),

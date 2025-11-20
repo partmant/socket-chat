@@ -83,9 +83,9 @@ const disconnect = () => {
     return;
   }
 
-  const quitPayload = {
+  const exitPayload = {
     roomId: Number(roomId.value),
-    type: "QUIT",
+    type: "EXIT",
     sender: "홍길동",
     content: ""
   };
@@ -93,7 +93,7 @@ const disconnect = () => {
   // 퇴장 메시지 전송
   client.publish({
     destination: "/app/chat.send",
-    body: JSON.stringify(quitPayload)
+    body: JSON.stringify(exitPayload)
   });
 
   // WebSocket 종료

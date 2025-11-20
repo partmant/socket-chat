@@ -3,45 +3,28 @@ package com.example.socketchatbackend.service.chat.message;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import com.example.socketchatbackend.dto.chat.message.ChatMessageRequest;
-import com.example.socketchatbackend.dto.chat.message.ChatMessageResponse;
-import com.example.socketchatbackend.dto.chat.message.MessageType;
-import com.example.socketchatbackend.util.ChatConstants;
+import com.example.socketchatbackend.dto.chat.message.MessageRequest;
+import com.example.socketchatbackend.dto.chat.message.MessageResponse;
 
 @Service
 public class MessageService {
 
     private final SimpMessagingTemplate messagingTemplate;
+    private final MessageFactory messageFactory;
 
-    public MessageService(SimpMessagingTemplate messagingTemplate) {
+    public MessageService(SimpMessagingTemplate messagingTemplate,
+                          MessageFactory messageFactory) {
         this.messagingTemplate = messagingTemplate;
+        this.messageFactory = messageFactory;
     }
 
-    public void broadcast(ChatMessageRequest req) {
-        ChatMessageResponse res = switch (req.type()) {
-            case ENTER -> createEnterMessage(req);
-            case QUIT -> createQuitMessage(req);
-            case TALK -> ChatMessageResponse.from(req);
+    public void broadcast(MessageRequest req) {
+        MessageResponse res = switch (req.type()) {
+            case ENTER -> messageFactory.createEnterMessage(req);
+            case EXIT -> messageFactory.createExitMessage(req);
+            case TALK -> messageFactory.createTalkMessage(req);
         };
 
         messagingTemplate.convertAndSend("/topic/room/" + req.roomId(), res);
-    }
-
-    private ChatMessageResponse createEnterMessage(ChatMessageRequest req) {
-        return new ChatMessageResponse(
-                req.roomId(),
-                MessageType.ENTER,
-                ChatConstants.SYSTEM_SENDER,
-                String.format(ChatConstants.ENTER_MESSAGE_FORMAT, req.sender())
-        );
-    }
-
-    private ChatMessageResponse createQuitMessage(ChatMessageRequest req) {
-        return new ChatMessageResponse(
-                req.roomId(),
-                MessageType.QUIT,
-                ChatConstants.SYSTEM_SENDER,
-                String.format(ChatConstants.QUIT_MESSAGE_FORMAT, req.sender())
-        );
     }
 }
