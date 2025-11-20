@@ -54,18 +54,4 @@ public class RoomController {
         RoomResponse response = queryService.findById(id);
         return ResponseEntity.ok(response);
     }
-
-    // 방 입장
-    @PostMapping("/{id}/enter")
-    public ResponseEntity<Void> enter(@PathVariable Long id, @RequestBody RoomEnterRequest request) {
-        entranceService.enter(id, request);
-        return ResponseEntity.ok().build();
-    }
-
-    // 방 퇴장
-    @PostMapping("/{id}/exit")
-    public ResponseEntity<Void> exit(@PathVariable Long id, @RequestBody RoomExitRequest request) {
-        exitService.exit(id, request);
-        return ResponseEntity.ok().build();
-    }
 }
