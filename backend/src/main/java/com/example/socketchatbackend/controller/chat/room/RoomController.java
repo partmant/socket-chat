@@ -2,6 +2,8 @@ package com.example.socketchatbackend.controller.chat.room;
 
 import java.util.List;
 
+import com.example.socketchatbackend.dto.chat.room.RoomExitRequest;
+import com.example.socketchatbackend.service.chat.room.RoomExitService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +22,16 @@ public class RoomController {
     private final RoomCommandService commandService;
     private final RoomQueryService queryService;
     private final RoomEntranceService entranceService;
+    private final RoomExitService exitService;
 
     public RoomController(RoomCommandService commandService,
                           RoomQueryService queryService,
-                          RoomEntranceService entranceService) {
+                          RoomEntranceService entranceService,
+                          RoomExitService exitService) {
         this.commandService = commandService;
         this.queryService = queryService;
         this.entranceService = entranceService;
+        this.exitService = exitService;
     }
 
     // 방 생성
@@ -54,6 +59,13 @@ public class RoomController {
     @PostMapping("/{id}/enter")
     public ResponseEntity<Void> enter(@PathVariable Long id, @RequestBody RoomEnterRequest request) {
         entranceService.enter(id, request);
+        return ResponseEntity.ok().build();
+    }
+
+    // 방 퇴장
+    @PostMapping("/{id}/exit")
+    public ResponseEntity<Void> exit(@PathVariable Long id, @RequestBody RoomExitRequest request) {
+        exitService.exit(id, request);
         return ResponseEntity.ok().build();
     }
 }
