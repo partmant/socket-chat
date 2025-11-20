@@ -32,7 +32,7 @@ public class RoomEntranceService {
         // 1. 방 존재 + 비밀번호 검증
         Room room = verifyRoomAccessAndGetRoom(roomId, request.password());
 
-        // 2. 닉네임 검증 (VO에서 처리)
+        // 2. 닉네임 검증
         RoomNickname nickname = new RoomNickname(request.nickname());
 
         // 3. 중복 / 정원 초과 체크
@@ -41,15 +41,15 @@ public class RoomEntranceService {
         // 4. 저장소에 입장 처리
         memberRepository.add(roomId, nickname.value());
 
-        // 5. **입장 WebSocket 메시지 전송**
-        messageService.broadcast(
-                new MessageRequest(
-                        roomId,
-                        MessageType.ENTER,
-                        nickname.value(),
-                        null
-                )
+        // 5. 입장 WebSocket 메시지 전송
+        MessageRequest enterRequest = new MessageRequest(
+                roomId,
+                MessageType.ENTER,
+                nickname.value(),
+                null
         );
+
+        messageService.broadcast(enterRequest);
     }
 
     public Room verifyRoomAccessAndGetRoom(Long id, String password) {
