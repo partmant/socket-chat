@@ -19,6 +19,7 @@ public enum ErrorMessages {
     NICKNAME_NULL("닉네임은 null일 수 없습니다."),
     NICKNAME_LENGTH_EXCEED("닉네임 길이는 1~16자 이내여야 합니다."),
     NICKNAME_DUPLICATION("같은 이름의 사용자가 존재합니다."),
+    NICKNAME_NOT_FOUND("해당 닉네임은 방에 존재하지 않습니다."),
 
     ROOM_NOT_FOUND("요청한 ID의 채팅방을 찾을 수 없습니다.");
 
