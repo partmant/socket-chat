@@ -1,6 +1,6 @@
 package com.example.socketchatbackend.domain.chat.vo;
 
-import static com.example.socketchatbackend.constraint.chat.RoomConstraints.*;
+import static com.example.socketchatbackend.constraint.chat.room.RoomConstraints.*;
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 public record RoomPassword(String password) {

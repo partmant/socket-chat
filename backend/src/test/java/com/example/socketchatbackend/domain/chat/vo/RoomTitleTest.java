@@ -2,7 +2,7 @@ package com.example.socketchatbackend.domain.chat.vo;
 
 import static org.assertj.core.api.Assertions.*;
 
-import static com.example.socketchatbackend.constraint.chat.RoomConstraints.*;
+import static com.example.socketchatbackend.constraint.chat.room.RoomConstraints.*;
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 import org.junit.jupiter.api.DisplayName;

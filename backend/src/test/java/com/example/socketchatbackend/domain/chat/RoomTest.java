@@ -2,7 +2,7 @@ package com.example.socketchatbackend.domain.chat;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import static com.example.socketchatbackend.constraint.chat.RoomConstraints.*;
+import static com.example.socketchatbackend.constraint.chat.room.RoomConstraints.*;
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 import java.util.stream.Stream;

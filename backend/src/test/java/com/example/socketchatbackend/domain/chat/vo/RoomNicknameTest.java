@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
-import static com.example.socketchatbackend.constraint.chat.RoomConstraints.MAX_NICKNAME_LENGTH;
+import static com.example.socketchatbackend.constraint.chat.room.RoomConstraints.MAX_NICKNAME_LENGTH;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

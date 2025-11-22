@@ -1,4 +1,4 @@
-package com.example.socketchatbackend.constraint.chat;
+package com.example.socketchatbackend.constraint.chat.room;
 
 public final class RoomConstraints {
     public static final int MAX_TITLE_LENGTH = 50;
