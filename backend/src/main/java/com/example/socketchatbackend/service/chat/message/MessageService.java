@@ -2,8 +2,8 @@ package com.example.socketchatbackend.service.chat.message;
 
 import org.springframework.stereotype.Service;
 
-import com.example.socketchatbackend.dto.chat.message.MessageRequest;
-import com.example.socketchatbackend.dto.chat.message.MessageResponse;
+import com.example.socketchatbackend.dto.chat.message.RoomMessageRequest;
+import com.example.socketchatbackend.dto.chat.message.RoomMessageResponse;
 import com.example.socketchatbackend.dto.chat.message.MessageType;
 
 @Service
@@ -18,12 +18,12 @@ public class MessageService {
         this.messageBroadcaster = messageBroadcaster;
     }
 
-    public void broadcast(MessageRequest req) {
-        MessageResponse res = toResponse(req);
+    public void broadcast(RoomMessageRequest req) {
+        RoomMessageResponse res = toResponse(req);
         messageBroadcaster.broadcast(req.roomId(), res);
     }
 
-    private MessageResponse toResponse(MessageRequest req) {
+    private RoomMessageResponse toResponse(RoomMessageRequest req) {
         return switch (req.type()) {
             case MessageType.ENTER -> messageFactory.createEnterMessage(req);
             case MessageType.EXIT  -> messageFactory.createExitMessage(req);

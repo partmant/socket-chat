@@ -1,6 +1,6 @@
 package com.example.socketchatbackend.dto.chat.message;
 
-public record MessageRequest(
+public record RoomMessageRequest(
         Long roomId,
         MessageType type,
         String sender,

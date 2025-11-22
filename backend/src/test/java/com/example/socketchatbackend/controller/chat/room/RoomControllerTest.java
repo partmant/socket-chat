@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 
+import com.example.socketchatbackend.service.chat.room.RoomEntranceService;
+import com.example.socketchatbackend.service.chat.room.RoomExitService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +21,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.socketchatbackend.dto.chat.room.RoomCreateRequest;
-import com.example.socketchatbackend.dto.chat.room.RoomResponse;
+import com.example.socketchatbackend.dto.chat.room.RoomInfoResponse;
 import com.example.socketchatbackend.service.chat.room.RoomCommandService;
 import com.example.socketchatbackend.service.chat.room.RoomQueryService;
 
@@ -47,6 +49,12 @@ class RoomControllerTest {
     @MockitoBean
     RoomQueryService queryService;
 
+    @MockitoBean
+    RoomEntranceService entranceService;
+
+    @MockitoBean
+    RoomExitService exitService;
+
     @Test
     @DisplayName("방 생성 요청이 들어오면 생성된 방 ID를 반환한다")
     void 방_생성_요청이_들어오면_ID를_반환한다() throws Exception {
@@ -63,9 +71,9 @@ class RoomControllerTest {
     @Test
     @DisplayName("방 목록을 조회하면 전체 방 목록을 반환한다")
     void 방_목록을_조회하면_전체_목록을_반환한다() throws Exception {
-        List<RoomResponse> rooms = List.of(
-                new RoomResponse(VALID_ID1, VALID_TITLE1, true, VALID_MAX_USER_COUNT),
-                new RoomResponse(VALID_ID2, VALID_TITLE2, false, VALID_MAX_USER_COUNT)
+        List<RoomInfoResponse> rooms = List.of(
+                new RoomInfoResponse(VALID_ID1, VALID_TITLE1, true, VALID_MAX_USER_COUNT),
+                new RoomInfoResponse(VALID_ID2, VALID_TITLE2, false, VALID_MAX_USER_COUNT)
         );
         given(queryService.findAll(null)).willReturn(rooms);
 
@@ -82,7 +90,7 @@ class RoomControllerTest {
     @Test
     @DisplayName("방 ID로 조회하면 해당 방 정보를 반환한다")
     void 방_ID로_조회하면_해당_방_정보를_반환한다() throws Exception {
-        RoomResponse response = new RoomResponse(VALID_ID1, VALID_TITLE1, true, VALID_MAX_USER_COUNT);
+        RoomInfoResponse response = new RoomInfoResponse(VALID_ID1, VALID_TITLE1, true, VALID_MAX_USER_COUNT);
         given(queryService.findById(VALID_ID1)).willReturn(response);
 
         mockMvc.perform(get(BASE_URL + "/" + VALID_ID1))

@@ -7,8 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.example.socketchatbackend.dto.chat.message.MessageRequest;
-import com.example.socketchatbackend.dto.chat.message.MessageResponse;
+import com.example.socketchatbackend.dto.chat.message.RoomMessageRequest;
+import com.example.socketchatbackend.dto.chat.message.RoomMessageResponse;
 import com.example.socketchatbackend.dto.chat.message.MessageType;
 
 class MessageServiceTest {
@@ -31,8 +31,8 @@ class MessageServiceTest {
     @Test
     @DisplayName("ENTER 메시지를 생성하여 해당 topic으로 전송한다")
     void ENTER_메시지_브로드캐스트() {
-        MessageRequest req = new MessageRequest(VALID_ROOM_ID, MessageType.ENTER, SENDER, null);
-        MessageResponse res = new MessageResponse(VALID_ROOM_ID, MessageType.ENTER, SYSTEM_SENDER, "입장");
+        RoomMessageRequest req = new RoomMessageRequest(VALID_ROOM_ID, MessageType.ENTER, SENDER, null);
+        RoomMessageResponse res = new RoomMessageResponse(VALID_ROOM_ID, MessageType.ENTER, SYSTEM_SENDER, "입장");
 
         given(factory.createEnterMessage(req)).willReturn(res);
 
@@ -44,8 +44,8 @@ class MessageServiceTest {
     @Test
     @DisplayName("EXIT 메시지를 생성하여 해당 topic으로 전송한다")
     void EXIT_메시지_브로드캐스트() {
-        MessageRequest req = new MessageRequest(VALID_ROOM_ID, MessageType.EXIT, SENDER, null);
-        MessageResponse res = new MessageResponse(VALID_ROOM_ID, MessageType.EXIT, SYSTEM_SENDER, "퇴장");
+        RoomMessageRequest req = new RoomMessageRequest(VALID_ROOM_ID, MessageType.EXIT, SENDER, null);
+        RoomMessageResponse res = new RoomMessageResponse(VALID_ROOM_ID, MessageType.EXIT, SYSTEM_SENDER, "퇴장");
 
         given(factory.createExitMessage(req)).willReturn(res);
 
@@ -57,8 +57,8 @@ class MessageServiceTest {
     @Test
     @DisplayName("TALK 메시지를 생성하여 해당 topic으로 전송한다")
     void TALK_메시지_브로드캐스트() {
-        MessageRequest req = new MessageRequest(VALID_ROOM_ID, MessageType.TALK, SENDER, "hello");
-        MessageResponse res = new MessageResponse(VALID_ROOM_ID, MessageType.TALK, SENDER, "hello");
+        RoomMessageRequest req = new RoomMessageRequest(VALID_ROOM_ID, MessageType.TALK, SENDER, "hello");
+        RoomMessageResponse res = new RoomMessageResponse(VALID_ROOM_ID, MessageType.TALK, SENDER, "hello");
 
         given(factory.createTalkMessage(req)).willReturn(res);
 

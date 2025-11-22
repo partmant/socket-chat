@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.socketchatbackend.domain.chat.Room;
-import com.example.socketchatbackend.dto.chat.room.RoomResponse;
+import com.example.socketchatbackend.dto.chat.room.RoomInfoResponse;
 import com.example.socketchatbackend.repository.chat.RoomRepository;
 
 
@@ -20,18 +20,18 @@ public class RoomQueryService {
         this.roomRepository = roomRepository;
     }
 
-    public List<RoomResponse> findAll(String keyword) {
+    public List<RoomInfoResponse> findAll(String keyword) {
         List<Room> rooms = roomRepository.findAll();
         return filterByKeyword(rooms, keyword).stream()
-                .map(RoomResponse::from)
+                .map(RoomInfoResponse::from)
                 .toList();
     }
 
-    public RoomResponse findById(Long id) {
+    public RoomInfoResponse findById(Long id) {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(ROOM_NOT_FOUND.getMessage()));
 
-        return RoomResponse.from(room);
+        return RoomInfoResponse.from(room);
     }
 
     private List<Room> filterByKeyword(List<Room> rooms, String keyword) {

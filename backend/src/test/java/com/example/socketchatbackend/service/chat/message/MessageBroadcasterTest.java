@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import com.example.socketchatbackend.dto.chat.message.MessageResponse;
+import com.example.socketchatbackend.dto.chat.message.RoomMessageResponse;
 import com.example.socketchatbackend.dto.chat.message.MessageType;
 
 class MessageBroadcasterTest {
@@ -28,7 +28,7 @@ class MessageBroadcasterTest {
     @Test
     @DisplayName("MessageBroadcaster는 SimpMessagingTemplate을 올바른 목적지로 호출한다")
     void broadcast_호출이_성공적으로_이루어진다() {
-        MessageResponse res = new MessageResponse(VALID_ROOM_ID, MessageType.TALK, SENDER, "안녕");
+        RoomMessageResponse res = new RoomMessageResponse(VALID_ROOM_ID, MessageType.TALK, SENDER, "안녕");
 
         broadcaster.broadcast(VALID_ROOM_ID, res);
 

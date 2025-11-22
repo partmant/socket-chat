@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.example.socketchatbackend.dto.chat.message.MessageRequest;
-import com.example.socketchatbackend.dto.chat.message.MessageResponse;
+import com.example.socketchatbackend.dto.chat.message.RoomMessageRequest;
+import com.example.socketchatbackend.dto.chat.message.RoomMessageResponse;
 import com.example.socketchatbackend.dto.chat.message.MessageType;
 import com.example.socketchatbackend.util.ChatConstants;
 
@@ -20,9 +20,9 @@ class MessageFactoryTest {
     @Test
     @DisplayName("ENTER 메시지를 올바르게 생성한다")
     void ENTER_메시지가_정상적으로_생성된다() {
-        MessageRequest req = new MessageRequest(VALID_ROOM_ID, MessageType.ENTER, SENDER, null);
+        RoomMessageRequest req = new RoomMessageRequest(VALID_ROOM_ID, MessageType.ENTER, SENDER, null);
 
-        MessageResponse res = factory.createEnterMessage(req);
+        RoomMessageResponse res = factory.createEnterMessage(req);
 
         assertThat(res.roomId()).isEqualTo(VALID_ROOM_ID);
         assertThat(res.type()).isEqualTo(MessageType.ENTER);
@@ -33,9 +33,9 @@ class MessageFactoryTest {
     @Test
     @DisplayName("EXIT 메시지를 올바르게 생성한다")
     void EXIT_메시지가_정상적으로_생성된다() {
-        MessageRequest req = new MessageRequest(VALID_ROOM_ID, MessageType.EXIT, SENDER, null);
+        RoomMessageRequest req = new RoomMessageRequest(VALID_ROOM_ID, MessageType.EXIT, SENDER, null);
 
-        MessageResponse res = factory.createExitMessage(req);
+        RoomMessageResponse res = factory.createExitMessage(req);
 
         assertThat(res.roomId()).isEqualTo(VALID_ROOM_ID);
         assertThat(res.type()).isEqualTo(MessageType.EXIT);
@@ -46,9 +46,9 @@ class MessageFactoryTest {
     @Test
     @DisplayName("TALK 메시지를 올바르게 생성한다")
     void TALK_메시지가_정상적으로_생성된다() {
-        MessageRequest req = new MessageRequest(VALID_ROOM_ID, MessageType.TALK, SENDER, "안녕");
+        RoomMessageRequest req = new RoomMessageRequest(VALID_ROOM_ID, MessageType.TALK, SENDER, "안녕");
 
-        MessageResponse res = factory.createTalkMessage(req);
+        RoomMessageResponse res = factory.createTalkMessage(req);
 
         assertThat(res.roomId()).isEqualTo(VALID_ROOM_ID);
         assertThat(res.type()).isEqualTo(MessageType.TALK);

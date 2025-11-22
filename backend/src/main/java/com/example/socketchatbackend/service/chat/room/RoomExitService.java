@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.socketchatbackend.domain.chat.vo.RoomNickname;
 import com.example.socketchatbackend.dto.chat.room.RoomExitRequest;
-import com.example.socketchatbackend.dto.chat.message.MessageRequest;
+import com.example.socketchatbackend.dto.chat.message.RoomMessageRequest;
 import com.example.socketchatbackend.dto.chat.message.MessageType;
 import com.example.socketchatbackend.repository.chat.RoomMemberRepository;
 import com.example.socketchatbackend.repository.chat.RoomRepository;
@@ -35,7 +35,7 @@ public class RoomExitService {
 
         memberRepository.remove(roomId, nickname.value());
 
-        MessageRequest exitRequest = new MessageRequest(
+        RoomMessageRequest exitRequest = new RoomMessageRequest(
                 roomId,
                 MessageType.EXIT,
                 nickname.value(),
