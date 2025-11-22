@@ -1,35 +1,31 @@
 package com.example.socketchatbackend.service.chat.message;
 
-import com.example.socketchatbackend.dto.chat.message.MessageRequest;
-import com.example.socketchatbackend.dto.chat.message.MessageResponse;
-import com.example.socketchatbackend.dto.chat.message.MessageType;
+import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-
-import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.mock;
+import com.example.socketchatbackend.dto.chat.message.MessageRequest;
+import com.example.socketchatbackend.dto.chat.message.MessageResponse;
+import com.example.socketchatbackend.dto.chat.message.MessageType;
 
 class MessageServiceTest {
-
-    private static final String BASE_URL = "/topic/room";
 
     private static final Long VALID_ROOM_ID = 1L;
     private static final String SENDER = "user";
     private static final String SYSTEM_SENDER = "system";
 
-    private SimpMessagingTemplate template;
     private MessageFactory factory;
+    private MessageBroadcaster broadcaster;
     private MessageService service;
-
     @BeforeEach
     void setUp() {
-        template = mock(SimpMessagingTemplate.class);
         factory = mock(MessageFactory.class);
-        service = new MessageService(template, factory);
+        broadcaster = mock(MessageBroadcaster.class);
+        service = new MessageService(factory, broadcaster);
+
     }
 
     @Test
@@ -42,7 +38,7 @@ class MessageServiceTest {
 
         service.broadcast(req);
 
-        verify(template).convertAndSend(BASE_URL +"/" + VALID_ROOM_ID, res);
+        verify(broadcaster).broadcast(VALID_ROOM_ID, res);
     }
 
     @Test
@@ -55,7 +51,7 @@ class MessageServiceTest {
 
         service.broadcast(req);
 
-        verify(template).convertAndSend(BASE_URL + "/" + VALID_ROOM_ID, res);
+        verify(broadcaster).broadcast(VALID_ROOM_ID, res);
     }
 
     @Test
@@ -68,6 +64,6 @@ class MessageServiceTest {
 
         service.broadcast(req);
 
-        verify(template).convertAndSend(BASE_URL + "/" + VALID_ROOM_ID, res);
+        verify(broadcaster).broadcast(VALID_ROOM_ID, res);
     }
 }

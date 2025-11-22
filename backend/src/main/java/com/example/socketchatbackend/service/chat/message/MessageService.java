@@ -1,30 +1,33 @@
 package com.example.socketchatbackend.service.chat.message;
 
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.example.socketchatbackend.dto.chat.message.MessageRequest;
 import com.example.socketchatbackend.dto.chat.message.MessageResponse;
+import com.example.socketchatbackend.dto.chat.message.MessageType;
 
 @Service
 public class MessageService {
 
-    private final SimpMessagingTemplate messagingTemplate;
     private final MessageFactory messageFactory;
+    private final MessageBroadcaster messageBroadcaster;
 
-    public MessageService(SimpMessagingTemplate messagingTemplate,
-                          MessageFactory messageFactory) {
-        this.messagingTemplate = messagingTemplate;
+    public MessageService(MessageFactory messageFactory,
+                          MessageBroadcaster messageBroadcaster) {
         this.messageFactory = messageFactory;
+        this.messageBroadcaster = messageBroadcaster;
     }
 
     public void broadcast(MessageRequest req) {
-        MessageResponse res = switch (req.type()) {
-            case ENTER -> messageFactory.createEnterMessage(req);
-            case EXIT -> messageFactory.createExitMessage(req);
-            case TALK -> messageFactory.createTalkMessage(req);
-        };
+        MessageResponse res = toResponse(req);
+        messageBroadcaster.broadcast(req.roomId(), res);
+    }
 
-        messagingTemplate.convertAndSend("/topic/room/" + req.roomId(), res);
+    private MessageResponse toResponse(MessageRequest req) {
+        return switch (req.type()) {
+            case MessageType.ENTER -> messageFactory.createEnterMessage(req);
+            case MessageType.EXIT  -> messageFactory.createExitMessage(req);
+            case MessageType.TALK  -> messageFactory.createTalkMessage(req);
+        };
     }
 }
