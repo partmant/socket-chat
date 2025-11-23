@@ -1,7 +1,10 @@
 package com.example.socketchatbackend.service.chat.message;
 
+import com.example.socketchatbackend.exception.chat.ErrorMessages;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.HtmlUtils;
 
+import com.example.socketchatbackend.repository.chat.RoomMemberRepository;
 import com.example.socketchatbackend.dto.chat.message.RoomMessageRequest;
 import com.example.socketchatbackend.dto.chat.message.RoomMessageResponse;
 import com.example.socketchatbackend.dto.chat.message.MessageType;
@@ -10,8 +13,14 @@ import com.example.socketchatbackend.util.ChatConstants;
 @Component
 public class MessageFactory {
 
+    private final RoomMemberRepository roomMemberRepository;
+
+    public MessageFactory(RoomMemberRepository roomMemberRepository) {
+        this.roomMemberRepository = roomMemberRepository;
+    }
+
     public RoomMessageResponse createEnterMessage(RoomMessageRequest req) {
-        String nickname = verifySender(req.sender());
+        String nickname = verifySender(req.sender(), req.roomId());
 
         return new RoomMessageResponse(
                 req.roomId(),
@@ -22,7 +31,7 @@ public class MessageFactory {
     }
 
     public RoomMessageResponse createExitMessage(RoomMessageRequest req) {
-        String nickname = verifySender(req.sender());
+        String nickname = verifySender(req.sender(), req.roomId());
 
         return new RoomMessageResponse(
                 req.roomId(),
@@ -33,8 +42,8 @@ public class MessageFactory {
     }
 
     public RoomMessageResponse createTalkMessage(RoomMessageRequest req) {
+        String verifiedSender = verifySender(req.sender(), req.roomId());
         String sanitizedContent = sanitizeContent(req.content());
-        String verifiedSender = verifySender(req.sender());
 
         return new RoomMessageResponse(
                 req.roomId(),
@@ -44,11 +53,19 @@ public class MessageFactory {
         );
     }
 
-    private String verifySender(String sender) {
+    private String verifySender(String sender, Long roomId) {
+        if (!roomMemberRepository.exists(roomId, sender)) {
+            throw new IllegalArgumentException(ErrorMessages.NICKNAME_NOT_FOUND.getMessage());
+        }
         return sender;
     }
 
     private String sanitizeContent(String content) {
-        return content;
+        if (content == null) {
+            return "";
+        }
+
+        String escaped = HtmlUtils.htmlEscape(content);
+        return escaped.trim();
     }
 }
