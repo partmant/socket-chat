@@ -1,6 +1,7 @@
 <script>
 import api from "../api";
 import CreateRoomModal from "../components/CreateRoomModal.vue";
+import NicknameModal from "../components/NicknameModal.vue";
 
 export default {
   data() {
@@ -8,10 +9,12 @@ export default {
       rooms: [],
       keyword: "",
       createModal: false,
+      nicknameModal: false,
+      selectedRoomId: null,
     };
   },
 
-  components: { CreateRoomModal },
+  components: { CreateRoomModal, NicknameModal },
 
   computed: {
     filteredRooms() {
@@ -41,7 +44,16 @@ export default {
     },
 
     onRoomCreated(roomId) {
-      this.$router.push(`/rooms/${roomId}`);
+      this.selectedRoomId = roomId;
+      this.nicknameModal = true;
+    },
+
+    onNicknameSubmit(nickname) {
+      this.nicknameModal = false;
+      this.$router.push({
+        path: `/rooms/${this.selectedRoomId}`,
+        query: { nickname }
+      });
     },
 
     onEnterRoomClick(room) {
@@ -69,10 +81,17 @@ export default {
         <button class="btn-enter" @click="onEnterRoomClick(room)">입장하기</button>
       </div>
     </div>
+
     <CreateRoomModal
       v-if="createModal"
       @close="closeCreateModal"
       @created="onRoomCreated"
+    />
+
+    <NicknameModal
+      v-if="nicknameModal"
+      @close="nicknameModal = false"
+      @submit="onNicknameSubmit"
     />
   </div>
 </template>
