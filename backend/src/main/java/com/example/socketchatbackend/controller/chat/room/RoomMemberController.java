@@ -10,6 +10,7 @@ import com.example.socketchatbackend.service.chat.room.RoomExitService;
 
 @RestController
 @RequestMapping("/api/rooms")
+@CrossOrigin(origins = "http://localhost:5173")
 public class RoomMemberController {
 
     private final RoomEntranceService entranceService;

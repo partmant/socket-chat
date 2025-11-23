@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/rooms")
+@CrossOrigin(origins = "http://localhost:5173")
 public class RoomMessageController {
 
     private final RoomMessageService roomMessageService;
