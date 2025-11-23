@@ -2,6 +2,7 @@
 import api from "../api";
 import CreateRoomModal from "../components/CreateRoomModal.vue";
 import NicknameModal from "../components/NicknameModal.vue";
+import PasswordCheckModal from "../components/PasswordCheckModal.vue";
 
 export default {
   data() {
@@ -11,10 +12,16 @@ export default {
       createModal: false,
       nicknameModal: false,
       selectedRoomId: null,
+      passwordCheckModal: false,
+      selectedRoom: null,
     };
   },
 
-  components: { CreateRoomModal, NicknameModal },
+  components: {
+    CreateRoomModal,
+    NicknameModal,
+    PasswordCheckModal
+  },
 
   computed: {
     filteredRooms() {
@@ -57,7 +64,13 @@ export default {
     },
 
     onEnterRoomClick(room) {
-      // TODO: 방 입장 모달 열기
+      if (room.hasPassword) {
+        this.selectedRoom = room;
+        this.passwordCheckModal = true;
+      } else {
+        this.selectedRoomId = room.id;
+        this.nicknameModal = true;
+      }
     },
   },
 };
@@ -92,6 +105,17 @@ export default {
       v-if="nicknameModal"
       @close="nicknameModal = false"
       @submit="onNicknameSubmit"
+    />
+
+    <PasswordCheckModal
+      v-if="passwordCheckModal"
+      :room="selectedRoom"
+      @close="passwordCheckModal = false"
+      @success="() => {
+        passwordCheckModal = false;
+        selectedRoomId = selectedRoom.id;
+        nicknameModal = true;
+      }"
     />
   </div>
 </template>
