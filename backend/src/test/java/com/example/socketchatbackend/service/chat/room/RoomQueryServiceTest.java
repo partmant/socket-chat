@@ -6,6 +6,8 @@ import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 import java.util.List;
 
+import com.example.socketchatbackend.repository.chat.InMemoryRoomMemberRepository;
+import com.example.socketchatbackend.repository.chat.RoomMemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,12 +30,16 @@ class RoomQueryServiceTest {
 
     private RoomCommandService command;
     private RoomQueryService query;
+    private RoomMemberRepository memberRepo;
+    private InMemoryRoomRepository roomRepo;
 
     @BeforeEach
     void setUp() {
-        InMemoryRoomRepository repo = new InMemoryRoomRepository();
-        command = new RoomCommandService(repo);
-        query = new RoomQueryService(repo);
+        roomRepo = new InMemoryRoomRepository();
+        memberRepo = new InMemoryRoomMemberRepository();
+
+        command = new RoomCommandService(roomRepo);
+        query = new RoomQueryService(roomRepo, memberRepo);
     }
 
     @Test

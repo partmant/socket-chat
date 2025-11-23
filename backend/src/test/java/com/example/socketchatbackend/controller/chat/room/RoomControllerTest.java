@@ -36,6 +36,7 @@ class RoomControllerTest {
     private static final String VALID_TITLE2 = "test-room2";
     private static final String VALID_PASSWORD = "1234";
     private static final int VALID_MAX_USER_COUNT = 10;
+    private static final int VALID_CURRENT_USER_COUNT = 5;
 
     @Autowired
     MockMvc mockMvc;
@@ -72,9 +73,10 @@ class RoomControllerTest {
     @DisplayName("방 목록을 조회하면 전체 방 목록을 반환한다")
     void 방_목록을_조회하면_전체_목록을_반환한다() throws Exception {
         List<RoomInfoResponse> rooms = List.of(
-                new RoomInfoResponse(VALID_ID1, VALID_TITLE1, true, VALID_MAX_USER_COUNT),
-                new RoomInfoResponse(VALID_ID2, VALID_TITLE2, false, VALID_MAX_USER_COUNT)
+                new RoomInfoResponse(VALID_ID1, VALID_TITLE1, true, VALID_CURRENT_USER_COUNT, VALID_MAX_USER_COUNT),
+                new RoomInfoResponse(VALID_ID2, VALID_TITLE2, false, VALID_CURRENT_USER_COUNT, VALID_MAX_USER_COUNT)
         );
+
         given(queryService.findAll(null)).willReturn(rooms);
 
         mockMvc.perform(get(BASE_URL))
@@ -82,15 +84,20 @@ class RoomControllerTest {
                 .andExpect(jsonPath("$[0].id").value(VALID_ID1))
                 .andExpect(jsonPath("$[0].title").value(VALID_TITLE1))
                 .andExpect(jsonPath("$[0].hasPassword").value(true))
+                .andExpect(jsonPath("$[0].currentUserCount").value(VALID_CURRENT_USER_COUNT))
+                .andExpect(jsonPath("$[0].maxUserCount").value(VALID_MAX_USER_COUNT))
+
                 .andExpect(jsonPath("$[1].id").value(VALID_ID2))
                 .andExpect(jsonPath("$[1].title").value(VALID_TITLE2))
-                .andExpect(jsonPath("$[1].hasPassword").value(false));
+                .andExpect(jsonPath("$[1].hasPassword").value(false))
+                .andExpect(jsonPath("$[1].currentUserCount").value(VALID_CURRENT_USER_COUNT))
+                .andExpect(jsonPath("$[1].maxUserCount").value(VALID_MAX_USER_COUNT));
     }
 
     @Test
     @DisplayName("방 ID로 조회하면 해당 방 정보를 반환한다")
     void 방_ID로_조회하면_해당_방_정보를_반환한다() throws Exception {
-        RoomInfoResponse response = new RoomInfoResponse(VALID_ID1, VALID_TITLE1, true, VALID_MAX_USER_COUNT);
+        RoomInfoResponse response = new RoomInfoResponse(VALID_ID1, VALID_TITLE1, true, VALID_CURRENT_USER_COUNT, VALID_MAX_USER_COUNT);
         given(queryService.findById(VALID_ID1)).willReturn(response);
 
         mockMvc.perform(get(BASE_URL + "/" + VALID_ID1))

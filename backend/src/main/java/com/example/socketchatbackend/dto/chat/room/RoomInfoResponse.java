@@ -6,14 +6,16 @@ public record RoomInfoResponse(
         Long id,
         String title,
         boolean hasPassword,
-        int capacity
+        int currentUserCount,
+        int maxUserCount
 ) {
 
-    public static RoomInfoResponse from(Room room) {
+    public static RoomInfoResponse of(Room room, int currentUsers) {
         return new RoomInfoResponse(
                 room.id(),
                 room.title().value(),
                 room.hasPassword(),
+                currentUsers,
                 room.capacity().value()
         );
     }
