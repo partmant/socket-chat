@@ -2,7 +2,6 @@ package com.example.socketchatbackend.controller.chat.room;
 
 import java.util.List;
 
-import com.example.socketchatbackend.service.chat.room.RoomExitService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,6 @@ import com.example.socketchatbackend.dto.chat.room.RoomCreateRequest;
 import com.example.socketchatbackend.dto.chat.room.RoomInfoResponse;
 import com.example.socketchatbackend.service.chat.room.RoomCommandService;
 import com.example.socketchatbackend.service.chat.room.RoomQueryService;
-import com.example.socketchatbackend.service.chat.room.RoomEntranceService;
 
 @RestController
 @RequestMapping("/api/rooms")
@@ -19,17 +17,12 @@ public class RoomController {
 
     private final RoomCommandService commandService;
     private final RoomQueryService queryService;
-    private final RoomEntranceService entranceService;
-    private final RoomExitService exitService;
 
     public RoomController(RoomCommandService commandService,
-                          RoomQueryService queryService,
-                          RoomEntranceService entranceService,
-                          RoomExitService exitService) {
+                          RoomQueryService queryService) {
         this.commandService = commandService;
         this.queryService = queryService;
-        this.entranceService = entranceService;
-        this.exitService = exitService;
+
     }
 
     // 방 생성
