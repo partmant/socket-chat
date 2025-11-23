@@ -33,8 +33,6 @@ public class RoomExitService {
         validateRoomExists(roomId);
         validateMemberExists(roomId, nickname);
 
-        memberRepository.remove(roomId, nickname.value());
-
         RoomMessageRequest exitRequest = new RoomMessageRequest(
                 roomId,
                 MessageType.EXIT,
@@ -43,6 +41,8 @@ public class RoomExitService {
         );
 
         messageService.broadcast(exitRequest);
+
+        memberRepository.remove(roomId, nickname.value());
     }
 
     private void validateRoomExists(Long roomId) {
