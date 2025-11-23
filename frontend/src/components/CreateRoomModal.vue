@@ -35,7 +35,7 @@ export default {
 
         const res = await api.post("/api/rooms", payload);
 
-        this.$emit("created", res.data.id);
+        this.$emit("created", res.data);
         this.$emit("close");
 
       } catch (e) {
