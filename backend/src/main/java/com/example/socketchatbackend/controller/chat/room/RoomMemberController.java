@@ -1,8 +1,11 @@
 package com.example.socketchatbackend.controller.chat.room;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.socketchatbackend.domain.chat.Room;
 import com.example.socketchatbackend.dto.chat.room.RoomEnterRequest;
 import com.example.socketchatbackend.dto.chat.room.RoomExitRequest;
 import com.example.socketchatbackend.service.chat.room.RoomEntranceService;
@@ -31,6 +34,15 @@ public class RoomMemberController {
     @PostMapping("/{id}/exit")
     public ResponseEntity<Void> exit(@PathVariable Long id, @RequestBody RoomExitRequest request) {
         exitService.exit(id, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/check-password")
+    public ResponseEntity<Void> checkPassword(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        String password = body.get("password");
+
+        Room room = entranceService.verifyRoomAccessAndGetRoom(id, password);
+
         return ResponseEntity.ok().build();
     }
 }
