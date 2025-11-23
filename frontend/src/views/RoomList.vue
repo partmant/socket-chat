@@ -51,8 +51,9 @@ export default {
       this.createModal = false;
     },
 
-    onRoomCreated(roomId) {
+    onRoomCreated({ roomId, password }) {
       this.selectedRoomId = roomId;
+      this.selectedPassword = password;  
       this.nicknameModal = true;
     },
 

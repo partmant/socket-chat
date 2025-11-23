@@ -35,9 +35,12 @@ export default {
 
         const res = await api.post("/api/rooms", payload);
 
-        this.$emit("created", res.data);
-        this.$emit("close");
+        this.$emit("created", { 
+          roomId: res.data,
+          password: this.isPrivate ? this.password : null
+        });
 
+        this.$emit("close");
       } catch (e) {
         console.error(e);
         alert("방 생성에 실패했습니다.");
