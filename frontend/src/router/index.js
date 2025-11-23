@@ -1,20 +1,15 @@
 import { createRouter, createWebHistory } from "vue-router";
+import RoomList from "../views/RoomList.vue";
 
 const routes = [
   {
     path: "/",
-    redirect: "/test-chat",
-  },
-  {
-    path: "/test-chat",
-    name: "test-chat",
-    component: () => import("../components/ChatTest.vue"),
-  },
+    name: "RoomList",
+    component: RoomList,
+  }
 ];
 
-const router = createRouter({
+export default createRouter({
   history: createWebHistory(),
   routes,
 });
-
-export default router;
