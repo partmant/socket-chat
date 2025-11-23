@@ -8,6 +8,7 @@ import static com.example.socketchatbackend.constraint.chat.message.MessageConst
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -17,8 +18,9 @@ import com.example.socketchatbackend.dto.chat.message.RoomMessageResponse;
 import com.example.socketchatbackend.exception.chat.ErrorMessages;
 import com.example.socketchatbackend.service.chat.message.MessageBroadcaster;
 import com.example.socketchatbackend.service.chat.message.MessageFactory;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-
+@ExtendWith(MockitoExtension.class)
 class RoomMessageServiceTest {
 
     private static final Long VALID_ROOM_ID = 1L;
@@ -40,9 +42,6 @@ class RoomMessageServiceTest {
     void setUp() {
         willDoNothing().given(validationService).validateRoomExists(VALID_ROOM_ID);
         willDoNothing().given(validationService).validateMemberExists(VALID_ROOM_ID, VALID_NICKNAME);
-
-        given(messageFactory.createTalkMessage(any(RoomMessageRequest.class)))
-                .willReturn(new RoomMessageResponse(VALID_ROOM_ID, MessageType.TALK, VALID_NICKNAME, VALID_CONTENT));
     }
 
     @Test
@@ -60,6 +59,10 @@ class RoomMessageServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(ErrorMessages.MESSAGE_CONTENT_EMPTY.getMessage());
 
+        assertThatThrownBy(() -> roomMessageService.sendTalkMessage(whitespaceReq))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(ErrorMessages.MESSAGE_CONTENT_EMPTY.getMessage());
+
         verify(broadcaster, never()).broadcast(anyLong(), any(RoomMessageResponse.class));
     }
 
@@ -72,6 +75,9 @@ class RoomMessageServiceTest {
                 .sender(VALID_NICKNAME)
                 .content(VALID_CONTENT)
                 .build();
+
+        given(messageFactory.createTalkMessage(any(RoomMessageRequest.class)))
+                .willReturn(new RoomMessageResponse(VALID_ROOM_ID, MessageType.TALK, VALID_NICKNAME, VALID_CONTENT));
 
         roomMessageService.sendTalkMessage(req);
 
