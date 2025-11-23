@@ -22,7 +22,7 @@ public class RoomCommandService {
 
     public Long create(RoomCreateRequest request) {
         RoomTitle title = new RoomTitle(request.title());
-        RoomPassword password = new RoomPassword(request.password());
+        RoomPassword password = createRoomPassword(request.password());
         RoomCapacity capacity = new RoomCapacity(request.maxUserCount());
 
         validateDuplicateTitle(title);
@@ -31,6 +31,16 @@ public class RoomCommandService {
 
         Room saved = roomRepository.save(room);
         return saved.id();
+    }
+
+    private RoomPassword createRoomPassword(String rawPassword) {
+        // 비밀번호 설정 X
+        if (rawPassword == null || rawPassword.isBlank()) {
+            return RoomPassword.none();
+        }
+
+        // 비밀번호 설정 O
+        return RoomPassword.of(rawPassword);
     }
 
     private void validateDuplicateTitle(RoomTitle title) {

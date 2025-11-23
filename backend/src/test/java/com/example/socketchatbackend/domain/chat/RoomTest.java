@@ -28,7 +28,7 @@ class RoomTest {
     void 제목이_null이면_예외가_발생한다() {
         assertThatThrownBy(() ->
                 Room.of(new RoomTitle(null),
-                        new RoomPassword(VALID_PASSWORD),
+                        RoomPassword.of(VALID_PASSWORD),
                         new RoomCapacity(VALID_CAPACITY))
         )
                 .isInstanceOf(IllegalArgumentException.class)
@@ -40,7 +40,7 @@ class RoomTest {
     void 제목이_비어있으면_예외가_발생한다() {
         assertThatThrownBy(() ->
                 Room.of(new RoomTitle("   "),
-                        new RoomPassword(VALID_PASSWORD),
+                        RoomPassword.of(VALID_PASSWORD),
                         new RoomCapacity(VALID_CAPACITY))
         )
                 .isInstanceOf(IllegalArgumentException.class)
@@ -54,7 +54,7 @@ class RoomTest {
 
         assertThatThrownBy(() ->
                 Room.of(new RoomTitle(tooLong),
-                        new RoomPassword(VALID_PASSWORD),
+                        RoomPassword.of(VALID_PASSWORD),
                         new RoomCapacity(VALID_CAPACITY))
         )
                 .isInstanceOf(IllegalArgumentException.class)
@@ -67,7 +67,7 @@ class RoomTest {
     void 비밀번호_길이가_허용범위를_벗어나면_예외가_발생한다(String invalidPassword) {
         assertThatThrownBy(() ->
                 Room.of(new RoomTitle(VALID_TITLE),
-                        new RoomPassword(invalidPassword),
+                        RoomPassword.of(invalidPassword),
                         new RoomCapacity(VALID_CAPACITY))
         )
                 .isInstanceOf(IllegalArgumentException.class)
@@ -80,7 +80,7 @@ class RoomTest {
     void 최대_인원이_허용범위를_벗어나면_예외가_발생한다(int invalidCapacity) {
         assertThatThrownBy(() ->
                 Room.of(new RoomTitle(VALID_TITLE),
-                        new RoomPassword(VALID_PASSWORD),
+                        RoomPassword.of(VALID_PASSWORD),
                         new RoomCapacity(invalidCapacity))
         )
                 .isInstanceOf(IllegalArgumentException.class)

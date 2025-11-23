@@ -9,7 +9,7 @@ public enum ErrorMessages {
 
     PASSWORD_LENGTH_EXCEEDED("비밀번호 길이가 허용 범위를 초과했습니다."),
     PASSWORD_INCORRECT("비밀번호가 일치하지 않습니다."),
-    PASSWORD_NULL("비밀번호는 null일 수 없습니다."),
+    PASSWORD_BLANK("비밀번호는 비어있을 수 없습니다."),
 
     CAPACITY_EXCEEDED("최대 인원 값이 허용 범위를 초과했습니다."),
     CAPACITY_NULL("허용 인원 수는 null일 수 없습니다."),

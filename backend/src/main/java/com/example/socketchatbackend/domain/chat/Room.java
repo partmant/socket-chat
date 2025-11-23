@@ -1,19 +1,16 @@
 package com.example.socketchatbackend.domain.chat;
 
+import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
+
 import com.example.socketchatbackend.domain.chat.vo.RoomCapacity;
 import com.example.socketchatbackend.domain.chat.vo.RoomPassword;
 import com.example.socketchatbackend.domain.chat.vo.RoomTitle;
-
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 public record Room(Long id, RoomTitle title, RoomPassword password, RoomCapacity capacity) {
 
     public Room {
         if (title == null) {
             throw new IllegalArgumentException(TITLE_NULL.getMessage());
-        }
-        if (password == null) {
-            throw new IllegalArgumentException(PASSWORD_NULL.getMessage());
         }
         if (capacity == null) {
             throw new IllegalArgumentException(CAPACITY_NULL.getMessage());
