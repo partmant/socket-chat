@@ -13,6 +13,7 @@ import com.example.socketchatbackend.service.chat.room.RoomQueryService;
 
 @RestController
 @RequestMapping("/api/rooms")
+@CrossOrigin(origins = "http://localhost:5173")
 public class RoomController {
 
     private final RoomCommandService commandService;
