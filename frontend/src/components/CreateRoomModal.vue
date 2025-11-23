@@ -1,3 +1,52 @@
+<script>
+import api from "../api";
+
+export default {
+  data() {
+    return {
+      title: "",
+      password: "",
+      isPrivate: false,
+      maxUserCount: 10,
+    };
+  },
+
+  methods: {
+    async createRoom() {
+      if (!this.title.trim()) {
+        alert("방 제목을 입력하세요.");
+        return;
+      }
+
+      if (this.isPrivate && !this.password.trim()) {
+        alert("비밀번호를 입력해야 합니다.");
+        return;
+      }
+
+      try {
+        const payload = {
+          title: this.title,
+          maxUserCount: this.maxUserCount,
+        };
+
+        if (this.isPrivate) {
+          payload.password = this.password;
+        }
+
+        const res = await api.post("/api/rooms", payload);
+
+        this.$emit("created", res.data.id);
+        this.$emit("close");
+
+      } catch (e) {
+        console.error(e);
+        alert("방 생성에 실패했습니다.");
+      }
+    }
+  }
+};
+</script>
+
 <template>
   <div class="overlay" @click.self="$emit('close')">
     <div class="modal">
@@ -39,50 +88,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import api from "../api";
-
-export default {
-  data() {
-    return {
-      title: "",
-      password: "",
-      isPrivate: false,
-      maxUserCount: 10,
-    };
-  },
-
-  methods: {
-    async createRoom() {
-      if (!this.title.trim()) {
-        alert("방 제목을 입력하세요.");
-        return;
-      }
-
-      if (this.isPrivate && !this.password.trim()) {
-        alert("비밀번호를 입력해야 합니다.");
-        return;
-      }
-
-      try {
-        const res = await api.post("/api/rooms", {
-          title: this.title,
-          password: this.isPrivate ? this.password : null,
-          capacity: this.maxUserCount,
-        });
-
-        this.$emit("created", res.data.id);
-        this.$emit("close");
-
-      } catch (e) {
-        console.error(e);
-        alert("방 생성에 실패했습니다.");
-      }
-    }
-  }
-};
-</script>
 
 <style scoped>
 .overlay {
