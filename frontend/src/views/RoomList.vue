@@ -119,12 +119,7 @@ export default {
       v-if="passwordCheckModal"
       :room="selectedRoom"
       @close="passwordCheckModal = false"
-      @success="(password) => {
-        this.passwordCheckModal = false;
-        this.selectedPassword = password;
-        this.selectedRoomId = this.selectedRoom.id;
-        this.nicknameModal = true;
-      }"
+      @success="onPasswordSuccess"
     />
   </div>
 </template>
