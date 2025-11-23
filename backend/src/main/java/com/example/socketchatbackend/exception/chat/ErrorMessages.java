@@ -23,7 +23,8 @@ public enum ErrorMessages {
 
     ROOM_NOT_FOUND("요청한 ID의 채팅방을 찾을 수 없습니다."),
 
-    MESSAGE_LENGTH_EXCEEDED("메시지의 길이는 200자 이하여야 합니다.");
+    MESSAGE_LENGTH_EXCEEDED("메시지의 길이는 200자 이하여야 합니다."),
+    MESSAGE_CONTENT_EMPTY("메시지는 비어있을 수 없습니다.");
 
     private final String message;
 

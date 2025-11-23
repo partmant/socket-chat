@@ -1,11 +1,12 @@
 package com.example.socketchatbackend.service.chat.room;
 
 import static com.example.socketchatbackend.constraint.chat.message.MessageConstraints.MAX_TALK_MESSAGE_LENGTH;
+import static com.example.socketchatbackend.exception.chat.ErrorMessages.MESSAGE_CONTENT_EMPTY;
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.MESSAGE_LENGTH_EXCEEDED;
 
-import com.example.socketchatbackend.dto.chat.message.MessageType;
 import org.springframework.stereotype.Service;
 
+import com.example.socketchatbackend.dto.chat.message.MessageType;
 import com.example.socketchatbackend.dto.chat.message.RoomMessageRequest;
 import com.example.socketchatbackend.dto.chat.message.RoomMessageResponse;
 import com.example.socketchatbackend.service.chat.message.MessageBroadcaster;
@@ -44,7 +45,11 @@ public class RoomMessageService {
         validationService.validateRoomExists(request.roomId());
         validationService.validateMemberExists(request.roomId(), request.sender());
 
-        if (request.content() != null && request.content().length() > MAX_TALK_MESSAGE_LENGTH) {
+        if (request.content() == null || request.content().trim().isEmpty()) {
+            throw new IllegalArgumentException(MESSAGE_CONTENT_EMPTY.getMessage());
+        }
+
+        if (request.content().length() > MAX_TALK_MESSAGE_LENGTH) {
             throw new IllegalArgumentException(MESSAGE_LENGTH_EXCEEDED.getMessage());
         }
     }
