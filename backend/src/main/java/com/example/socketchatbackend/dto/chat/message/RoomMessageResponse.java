@@ -5,14 +5,4 @@ public record RoomMessageResponse(
         MessageType type,
         String sender,
         String content
-) {
-
-    public static RoomMessageResponse from(RoomMessageRequest req) {
-        return new RoomMessageResponse(
-                req.roomId(),
-                req.type(),
-                req.sender(),
-                req.content()
-        );
-    }
-}
+) {}
