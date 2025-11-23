@@ -23,7 +23,7 @@ export default {
           password: this.password,
         });
 
-        this.$emit("success");
+        this.$emit("success", this.password);
       } catch (e) {
         this.error = "비밀번호가 틀렸습니다.";
       }

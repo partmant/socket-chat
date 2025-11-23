@@ -11,8 +11,9 @@ export default {
       keyword: "",
       createModal: false,
       nicknameModal: false,
-      selectedRoomId: null,
+      selectedRoomId: null, 
       passwordCheckModal: false,
+      selectedPassword: null,
       selectedRoom: null,
     };
   },
@@ -59,8 +60,15 @@ export default {
       this.nicknameModal = false;
       this.$router.push({
         path: `/rooms/${this.selectedRoomId}`,
-        query: { nickname }
+        query: { nickname, password: this.selectedPassword }
       });
+    },
+
+    onPasswordSuccess(password) {
+      this.passwordCheckModal = false;
+      this.selectedPassword = password;
+      this.selectedRoomId = this.selectedRoom.id;
+      this.nicknameModal = true;
     },
 
     onEnterRoomClick(room) {
@@ -111,10 +119,11 @@ export default {
       v-if="passwordCheckModal"
       :room="selectedRoom"
       @close="passwordCheckModal = false"
-      @success="() => {
-        passwordCheckModal = false;
-        selectedRoomId = selectedRoom.id;
-        nicknameModal = true;
+      @success="(password) => {
+        this.passwordCheckModal = false;
+        this.selectedPassword = password;
+        this.selectedRoomId = this.selectedRoom.id;
+        this.nicknameModal = true;
       }"
     />
   </div>
