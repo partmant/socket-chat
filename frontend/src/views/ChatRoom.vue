@@ -138,19 +138,30 @@ onMounted(async () => {
     </header>
 
     <section class="messages">
-      <div v-for="(m, i) in messages" :key="i" class="message-item">
-        <div v-if="m.type === 'TALK'" class="talk-message">
-          <span class="sender">[{{ m.sender }}]</span>
-          <span class="content">{{ m.content }}</span>
-        </div>
+      <div
+        v-for="(m, i) in messages"
+        :key="i"
+        class="message-item"
+        :class="{
+          'mine': m.sender === nickname,
+          'other': m.sender !== nickname && m.type === 'TALK',
+          'system': m.type !== 'TALK'
+        }"
+      >
+        <!-- 일반 메시지 -->
+        <template v-if="m.type === 'TALK'">
+          <div class="bubble">
+            <span class="sender" v-if="m.sender !== nickname">[{{ m.sender }}]</span>
+            <span class="content">{{ m.content }}</span>
+          </div>
+        </template>
 
-        <div v-else-if="m.type === 'ENTER'" class="system-message enter">
-          --- {{ m.content }} ---
-        </div>
-
-        <div v-else-if="m.type === 'EXIT'" class="system-message exit">
-          --- {{ m.content }} ---
-        </div>
+        <!-- 시스템 메시지 -->
+        <template v-else>
+          <div class="system-message">
+            --- {{ m.content }} ---
+          </div>
+        </template>
       </div>
     </section>
 
@@ -210,15 +221,41 @@ onMounted(async () => {
   overflow-y: auto;
   margin-bottom: 10px;
   background: #f9fafb;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 .message-item {
-  margin-bottom: 6px;
-  font-size: 16px;
+  margin-bottom: 10px;
+  display: flex;
+  width: 100%;
 }
-.talk-message .sender {
-  font-weight: 700;
+.message-item.mine {
+  justify-content: flex-end;
+}
+.message-item.mine .bubble {
+  background: #d1e7ff;
+  border-radius: 12px 12px 0 12px;
+  text-align: right;
+}
+.message-item.other {
+  justify-content: flex-start;
+}
+.message-item.other .bubble {
+  background: #ffffff;
+  border-radius: 12px 12px 12px 0;
+  text-align: left;
+}
+.bubble {
+  max-width: 70%;
+  padding: 10px 14px;
   font-size: 16px;
-  margin-right: 4px;
+  line-height: 1.4;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+.message-item.system {
+  justify-content: center;
 }
 .system-message {
   font-size: 12px;
