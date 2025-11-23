@@ -99,6 +99,7 @@ export default {
         <div class="left">
           <span v-if="room.hasPassword">🔒</span>
           <span class="title">{{ room.title }}</span>
+          <span class="count">({{ room.currentUserCount }}/{{ room.maxUserCount }})</span>
         </div>
         <button class="btn-enter" @click="onEnterRoomClick(room)">입장하기</button>
       </div>
@@ -169,6 +170,11 @@ export default {
 }
 .title {
     font-weight: bold;
+}
+.count {
+  font-size: 14px;
+  color: #6b7280;
+  margin-left: 8px;
 }
 .btn-enter {
     background: #3897f0;
