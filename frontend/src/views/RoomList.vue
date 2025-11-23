@@ -1,13 +1,17 @@
 <script>
 import api from "../api";
+import CreateRoomModal from "../components/CreateRoomModal.vue";
 
 export default {
   data() {
     return {
       rooms: [],
       keyword: "",
+      createModal: false,
     };
   },
+
+  components: { CreateRoomModal },
 
   computed: {
     filteredRooms() {
@@ -29,7 +33,15 @@ export default {
     },
 
     onCreateRoomClick() {
-      // TODO: 방 생성 모달 열기
+      this.createModal = true;
+    },
+    
+    closeCreateModal() {
+      this.createModal = false;
+    },
+
+    onRoomCreated(roomId) {
+      this.$router.push(`/rooms/${roomId}`);
     },
 
     onEnterRoomClick(room) {
@@ -57,6 +69,11 @@ export default {
         <button class="btn-enter" @click="onEnterRoomClick(room)">입장하기</button>
       </div>
     </div>
+    <CreateRoomModal
+      v-if="createModal"
+      @close="closeCreateModal"
+      @created="onRoomCreated"
+    />
   </div>
 </template>
 
