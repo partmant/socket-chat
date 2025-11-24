@@ -3,10 +3,11 @@ package com.example.socketchatbackend.domain.chat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import static com.example.socketchatbackend.constraint.chat.room.RoomConstraints.*;
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 import java.util.stream.Stream;
 
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -31,8 +32,8 @@ class RoomTest {
                         RoomPassword.of(VALID_PASSWORD),
                         new RoomCapacity(VALID_CAPACITY))
         )
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(TITLE_NULL.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessageContaining(ErrorCode.TITLE_NULL.message());
     }
 
     @Test
@@ -43,8 +44,8 @@ class RoomTest {
                         RoomPassword.of(VALID_PASSWORD),
                         new RoomCapacity(VALID_CAPACITY))
         )
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(TITLE_BLANK.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessageContaining(ErrorCode.TITLE_BLANK.message());
     }
 
     @Test
@@ -57,8 +58,8 @@ class RoomTest {
                         RoomPassword.of(VALID_PASSWORD),
                         new RoomCapacity(VALID_CAPACITY))
         )
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(TITLE_LENGTH_EXCEEDED.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessageContaining(ErrorCode.TITLE_LENGTH_EXCEEDED.message());
     }
 
     @ParameterizedTest
@@ -70,8 +71,8 @@ class RoomTest {
                         RoomPassword.of(invalidPassword),
                         new RoomCapacity(VALID_CAPACITY))
         )
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(PASSWORD_LENGTH_EXCEEDED.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessageContaining(ErrorCode.PASSWORD_LENGTH_EXCEEDED.message());
     }
 
     @ParameterizedTest
@@ -83,8 +84,8 @@ class RoomTest {
                         RoomPassword.of(VALID_PASSWORD),
                         new RoomCapacity(invalidCapacity))
         )
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(CAPACITY_EXCEEDED.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessageContaining(ErrorCode.CAPACITY_EXCEEDED.message());
     }
 
     private static Stream<String> invalidPasswordLengthProvider() {

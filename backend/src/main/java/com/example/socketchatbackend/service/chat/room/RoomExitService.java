@@ -1,7 +1,5 @@
 package com.example.socketchatbackend.service.chat.room;
 
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
-
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +7,8 @@ import com.example.socketchatbackend.domain.chat.vo.RoomNickname;
 import com.example.socketchatbackend.dto.chat.room.RoomExitRequest;
 import com.example.socketchatbackend.dto.chat.message.RoomMessageRequest;
 import com.example.socketchatbackend.dto.chat.message.MessageType;
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import com.example.socketchatbackend.repository.chat.RoomMemberRepository;
 import com.example.socketchatbackend.repository.chat.RoomRepository;
 import com.example.socketchatbackend.service.chat.message.MessageService;
@@ -61,12 +61,12 @@ public class RoomExitService {
 
     private void validateRoomExists(Long roomId) {
         roomRepository.findById(roomId)
-                .orElseThrow(() -> new IllegalArgumentException(ROOM_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
     }
 
     private void validateMemberExists(Long roomId, RoomNickname nickname) {
         if (!memberRepository.exists(roomId, nickname.value())) {
-            throw new IllegalArgumentException(NICKNAME_NOT_FOUND.getMessage());
+            throw new CustomException(ErrorCode.NICKNAME_NOT_FOUND);
         }
     }
 }

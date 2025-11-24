@@ -1,7 +1,9 @@
 package com.example.socketchatbackend.domain.chat.vo;
 
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
+
 import static com.example.socketchatbackend.constraint.chat.room.RoomConstraints.*;
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 public record RoomTitle(String value) {
 
@@ -13,19 +15,19 @@ public record RoomTitle(String value) {
 
     private void validateNotNull(String title) {
         if (title == null) {
-            throw new IllegalArgumentException(TITLE_NULL.getMessage());
+            throw new CustomException(ErrorCode.TITLE_NULL);
         }
     }
 
     private void validateNotBlank(String title) {
         if (title.isBlank()) {
-            throw new IllegalArgumentException(TITLE_BLANK.getMessage());
+            throw new CustomException(ErrorCode.TITLE_BLANK);
         }
     }
 
     private void validateLength(String title) {
         if (title.length() > MAX_TITLE_LENGTH) {
-            throw new IllegalArgumentException(TITLE_LENGTH_EXCEEDED.getMessage());
+            throw new CustomException(ErrorCode.TITLE_LENGTH_EXCEEDED);
         }
     }
 }

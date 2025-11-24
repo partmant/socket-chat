@@ -2,11 +2,12 @@ package com.example.socketchatbackend.service.chat.room;
 
 import static org.assertj.core.api.Assertions.*;
 
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import com.example.socketchatbackend.repository.chat.InMemoryRoomMemberRepository;
 import com.example.socketchatbackend.repository.chat.RoomMemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -97,8 +98,8 @@ class RoomQueryServiceTest {
     @DisplayName("존재하지 않는 ID로 조회하면 예외가 발생한다.")
     void 존재하지_않는_ID로_조회하면_예외가_발생한다() {
         assertThatThrownBy(() -> query.findById(1L))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ROOM_NOT_FOUND.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.ROOM_NOT_FOUND.message());
     }
 
     @Test

@@ -1,7 +1,9 @@
 package com.example.socketchatbackend.domain.chat.vo;
 
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
+
 import static com.example.socketchatbackend.constraint.chat.room.RoomConstraints.*;
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
 public final class RoomPassword {
 
@@ -16,12 +18,12 @@ public final class RoomPassword {
 
     public static RoomPassword of(String raw) {
         if (raw == null || raw.isBlank()) {
-            throw new IllegalArgumentException(PASSWORD_BLANK.getMessage());
+            throw new CustomException(ErrorCode.PASSWORD_BLANK);
         }
 
         // 길이 검증
         if (raw.length() < MIN_PASSWORD_LENGTH || raw.length() > MAX_PASSWORD_LENGTH) {
-            throw new IllegalArgumentException(PASSWORD_LENGTH_EXCEEDED.getMessage());
+            throw new CustomException(ErrorCode.PASSWORD_LENGTH_EXCEEDED);
         }
 
         return new RoomPassword(raw);

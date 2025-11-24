@@ -3,18 +3,19 @@ package com.example.socketchatbackend.service.chat.room;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
-
+import com.example.socketchatbackend.exception.CustomException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import com.example.socketchatbackend.dto.chat.room.RoomCreateRequest;
 import com.example.socketchatbackend.dto.chat.room.RoomExitRequest;
+import com.example.socketchatbackend.exception.ErrorCode;
 import com.example.socketchatbackend.repository.chat.InMemoryRoomMemberRepository;
 import com.example.socketchatbackend.repository.chat.InMemoryRoomRepository;
 import com.example.socketchatbackend.service.chat.message.MessageService;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 
 class RoomExitServiceTest {
 
@@ -68,8 +69,8 @@ class RoomExitServiceTest {
         RoomExitRequest req = new RoomExitRequest(VALID_NICK);
 
         assertThatThrownBy(() -> exitService.exit(INVALID_ROOM_ID, req))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ROOM_NOT_FOUND.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.ROOM_NOT_FOUND.message());
     }
 
     @Test
@@ -80,7 +81,7 @@ class RoomExitServiceTest {
         RoomExitRequest req = new RoomExitRequest(VALID_NICK);
 
         assertThatThrownBy(() -> exitService.exit(id, req))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(NICKNAME_NOT_FOUND.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.NICKNAME_NOT_FOUND.message());
     }
 }

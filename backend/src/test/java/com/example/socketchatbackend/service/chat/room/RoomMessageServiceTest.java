@@ -5,6 +5,8 @@ import static org.mockito.BDDMockito.*;
 
 import static com.example.socketchatbackend.constraint.chat.message.MessageConstraints.MAX_TALK_MESSAGE_LENGTH;
 
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +17,6 @@ import org.mockito.Mock;
 import com.example.socketchatbackend.dto.chat.message.RoomMessageRequest;
 import com.example.socketchatbackend.dto.chat.message.MessageType;
 import com.example.socketchatbackend.dto.chat.message.RoomMessageResponse;
-import com.example.socketchatbackend.exception.chat.ErrorMessages;
 import com.example.socketchatbackend.service.chat.message.MessageBroadcaster;
 import com.example.socketchatbackend.service.chat.message.MessageFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -56,12 +57,12 @@ class RoomMessageServiceTest {
                 .build();
 
         assertThatThrownBy(() -> roomMessageService.sendTalkMessage(emptyReq))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessages.MESSAGE_CONTENT_EMPTY.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.MESSAGE_CONTENT_EMPTY.message());
 
         assertThatThrownBy(() -> roomMessageService.sendTalkMessage(whitespaceReq))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessages.MESSAGE_CONTENT_EMPTY.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.MESSAGE_CONTENT_EMPTY.message());
 
         verify(broadcaster, never()).broadcast(anyLong(), any(RoomMessageResponse.class));
     }
@@ -104,8 +105,8 @@ class RoomMessageServiceTest {
                 .build();
 
         assertThatThrownBy(() -> roomMessageService.sendTalkMessage(req))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessages.MESSAGE_LENGTH_EXCEEDED.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.MESSAGE_LENGTH_EXCEEDED.message());
 
         verify(broadcaster, never()).broadcast(anyLong(), any(RoomMessageResponse.class));
         verify(messageFactory, never()).createTalkMessage(any(RoomMessageRequest.class));

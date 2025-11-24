@@ -2,9 +2,10 @@ package com.example.socketchatbackend.service.chat.room;
 
 import static org.assertj.core.api.Assertions.*;
 
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 import static org.mockito.Mockito.mock;
 
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,8 +43,8 @@ class RoomCommandServiceTest {
         commandService.create(req1);
 
         assertThatThrownBy(() -> commandService.create(req2))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(TITLE_DUPLICATION.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.TITLE_DUPLICATION.message());
     }
 
     @Test

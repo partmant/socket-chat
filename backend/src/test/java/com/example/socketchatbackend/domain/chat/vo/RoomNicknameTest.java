@@ -3,11 +3,13 @@ package com.example.socketchatbackend.domain.chat.vo;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 import static com.example.socketchatbackend.constraint.chat.room.RoomConstraints.MAX_NICKNAME_LENGTH;
 
+import com.example.socketchatbackend.exception.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import com.example.socketchatbackend.exception.ErrorCode;
 
 class RoomNicknameTest {
 
@@ -17,16 +19,16 @@ class RoomNicknameTest {
     @DisplayName("닉네임이 null이면 예외가 발생한다.")
     void 닉네임이_null이면_예외가_발생한다() {
         assertThatThrownBy(() -> new RoomNickname(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(NICKNAME_NULL.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.NICKNAME_NULL.message());
     }
 
     @Test
     @DisplayName("닉네임이 공백이면 예외가 발생한다.")
     void 닉네임_공백이면_예외가_발생한다() {
         assertThatThrownBy(() -> new RoomNickname("   "))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(NICKNAME_BLANK.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.NICKNAME_BLANK.message());
     }
 
     @Test
@@ -35,8 +37,8 @@ class RoomNicknameTest {
         String tooLong = "a".repeat(MAX_NICKNAME_LENGTH + 1);
 
         assertThatThrownBy(() -> new RoomNickname(tooLong))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(NICKNAME_LENGTH_EXCEED.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.NICKNAME_LENGTH_EXCEED.message());
     }
 
     @Test

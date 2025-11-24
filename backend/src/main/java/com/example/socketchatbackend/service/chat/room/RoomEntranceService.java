@@ -1,10 +1,10 @@
 package com.example.socketchatbackend.service.chat.room;
 
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
-
 import com.example.socketchatbackend.domain.chat.vo.RoomNickname;
 import com.example.socketchatbackend.dto.chat.message.RoomMessageRequest;
 import com.example.socketchatbackend.dto.chat.message.MessageType;
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import com.example.socketchatbackend.service.chat.message.MessageService;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -60,7 +60,7 @@ public class RoomEntranceService {
 
     public Room verifyRoomAccessAndGetRoom(Long id, String password) {
         Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(ROOM_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
 
         room.verifyPassword(password);
         return room;
@@ -70,12 +70,12 @@ public class RoomEntranceService {
         Long roomId = room.id();
 
         if (memberRepository.exists(roomId, nickname.value())) {
-            throw new IllegalArgumentException(NICKNAME_DUPLICATION.getMessage());
+            throw new CustomException(ErrorCode.NICKNAME_DUPLICATION);
         }
 
         int current = memberRepository.count(roomId);
         if (current >= room.capacity().value()) {
-            throw new IllegalArgumentException(ROOM_FULL.getMessage());
+            throw new CustomException(ErrorCode.ROOM_FULL);
         }
     }
 }

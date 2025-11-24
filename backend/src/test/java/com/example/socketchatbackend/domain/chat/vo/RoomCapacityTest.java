@@ -3,8 +3,9 @@ package com.example.socketchatbackend.domain.chat.vo;
 import static org.assertj.core.api.Assertions.*;
 
 import static com.example.socketchatbackend.constraint.chat.room.RoomConstraints.*;
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,8 +30,8 @@ class RoomCapacityTest {
     @DisplayName("허용된 범위를 벗어나면 예외가 발생한다.")
     void 허용된_범위를_벗어나면_예외가_발생한다(int invalidValue) {
         assertThatThrownBy(() -> new RoomCapacity(invalidValue))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(CAPACITY_EXCEEDED.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.CAPACITY_EXCEEDED.message());
     }
 
     @ParameterizedTest

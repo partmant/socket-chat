@@ -1,13 +1,13 @@
 package com.example.socketchatbackend.service.chat.room;
 
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
-
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.example.socketchatbackend.domain.chat.Room;
 import com.example.socketchatbackend.dto.chat.room.RoomInfoResponse;
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import com.example.socketchatbackend.repository.chat.RoomMemberRepository;
 import com.example.socketchatbackend.repository.chat.RoomRepository;
 
@@ -33,7 +33,7 @@ public class RoomQueryService {
 
     public RoomInfoResponse findById(Long id) {
         Room room = roomRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(ROOM_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
 
         return RoomInfoResponse.of(room, memberRepository.count(room.id()));
     }

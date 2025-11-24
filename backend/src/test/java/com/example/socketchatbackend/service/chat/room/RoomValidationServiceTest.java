@@ -11,7 +11,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.example.socketchatbackend.domain.chat.Room;
-import com.example.socketchatbackend.exception.chat.ErrorMessages;
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import com.example.socketchatbackend.repository.chat.RoomMemberRepository;
 import com.example.socketchatbackend.repository.chat.RoomRepository;
 
@@ -48,8 +49,8 @@ class RoomValidationServiceTest {
         given(roomRepository.findById(VALID_ROOM_ID)).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> validationService.validateRoomExists(VALID_ROOM_ID))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessages.ROOM_NOT_FOUND.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.ROOM_NOT_FOUND.message());
     }
 
     @Test
@@ -67,7 +68,7 @@ class RoomValidationServiceTest {
         given(memberRepository.exists(VALID_ROOM_ID, VALID_NICKNAME)).willReturn(false);
 
         assertThatThrownBy(() -> validationService.validateMemberExists(VALID_ROOM_ID, VALID_NICKNAME))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessages.NICKNAME_NOT_FOUND.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.NICKNAME_NOT_FOUND.message());
     }
 }

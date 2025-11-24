@@ -1,7 +1,7 @@
 package com.example.socketchatbackend.service.chat.room;
 
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
-
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +52,7 @@ public class RoomCommandService {
 
     private void validateDuplicateTitle(RoomTitle title) {
         if (roomRepository.existsByTitle(title)) {
-            throw new IllegalArgumentException(TITLE_DUPLICATION.getMessage());
+            throw new CustomException(ErrorCode.TITLE_DUPLICATION);
         }
     }
 }

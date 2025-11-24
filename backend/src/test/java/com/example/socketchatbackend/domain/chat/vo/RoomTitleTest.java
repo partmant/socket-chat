@@ -3,8 +3,9 @@ package com.example.socketchatbackend.domain.chat.vo;
 import static org.assertj.core.api.Assertions.*;
 
 import static com.example.socketchatbackend.constraint.chat.room.RoomConstraints.*;
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,8 +27,8 @@ class RoomTitleTest {
     @DisplayName("제목이 null이면 예외가 발생한다.")
     void 제목이_null이면_예외가_발생한다() {
         assertThatThrownBy(() -> new RoomTitle(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(TITLE_NULL.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.TITLE_NULL.message());
     }
 
     @ParameterizedTest
@@ -35,8 +36,8 @@ class RoomTitleTest {
     @DisplayName("제목이 공백 문자열이면 예외가 발생한다.")
     void 제목이_공백이면_예외가_발생한다(String blank) {
         assertThatThrownBy(() -> new RoomTitle(blank))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(TITLE_BLANK.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.TITLE_BLANK.message());
     }
 
     @Test
@@ -45,7 +46,7 @@ class RoomTitleTest {
         String over = "a".repeat(MAX_TITLE_LENGTH + 1);
 
         assertThatThrownBy(() -> new RoomTitle(over))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(TITLE_LENGTH_EXCEEDED.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.TITLE_LENGTH_EXCEEDED.message());
     }
 }

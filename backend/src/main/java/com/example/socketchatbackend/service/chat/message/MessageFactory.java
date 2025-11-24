@@ -1,6 +1,7 @@
 package com.example.socketchatbackend.service.chat.message;
 
-import com.example.socketchatbackend.exception.chat.ErrorMessages;
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.HtmlUtils;
 
@@ -55,7 +56,7 @@ public class MessageFactory {
 
     private String verifySender(String sender, Long roomId) {
         if (!roomMemberRepository.exists(roomId, sender)) {
-            throw new IllegalArgumentException(ErrorMessages.NICKNAME_NOT_FOUND.getMessage());
+            throw new CustomException(ErrorCode.NICKNAME_NOT_FOUND);
         }
         return sender;
     }

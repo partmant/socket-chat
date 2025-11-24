@@ -4,8 +4,8 @@ import static com.example.socketchatbackend.constraint.chat.room.RoomConstraints
 import static com.example.socketchatbackend.constraint.chat.room.RoomConstraints.MIN_PASSWORD_LENGTH;
 import static org.assertj.core.api.Assertions.*;
 
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
-
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -42,32 +42,32 @@ class RoomPasswordTest {
     @DisplayName("of() 호출 시 비밀번호가 공백 또는 빈 문자열이면 예외가 발생한다.")
     void of_호출시_비밀번호가_공백이거나_비어있으면_예외가_발생한다(String blankOrEmpty) {
         assertThatThrownBy(() -> RoomPassword.of(blankOrEmpty))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(PASSWORD_BLANK.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.PASSWORD_BLANK.message());
     }
 
     @Test
     @DisplayName("of() 호출 시 비밀번호가 null이면 예외가 발생한다.")
     void of_호출시_비밀번호가_null이면_예외가_발생한다() {
         assertThatThrownBy(() -> RoomPassword.of(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(PASSWORD_BLANK.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.PASSWORD_BLANK.message());
     }
 
     @Test
     @DisplayName("최소 길이보다 짧으면 예외가 발생한다.")
     void 최소_길이보다_짧으면_예외가_발생한다() {
         assertThatThrownBy(() -> RoomPassword.of(TOO_SHORT_PASSWORD))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(PASSWORD_LENGTH_EXCEEDED.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.PASSWORD_LENGTH_EXCEEDED.message());
     }
 
     @Test
     @DisplayName("최대 길이를 초과하면 예외가 발생한다.")
     void 최대_길이를_초과하면_예외가_발생한다() {
         assertThatThrownBy(() -> RoomPassword.of(TOO_LONG_PASSWORD))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(PASSWORD_LENGTH_EXCEEDED.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.PASSWORD_LENGTH_EXCEEDED.message());
     }
 
     @Test

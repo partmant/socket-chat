@@ -3,8 +3,8 @@ package com.example.socketchatbackend.service.chat.room;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
 
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
-
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,8 +51,8 @@ class RoomEntranceServiceTest {
         RoomEnterRequest req = new RoomEnterRequest(VALID_NICKNAME, null);
 
         assertThatThrownBy(() -> entrance.enter(INVALID_ID, req))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ROOM_NOT_FOUND.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.ROOM_NOT_FOUND.message());
     }
 
     @Test
@@ -72,8 +72,8 @@ class RoomEntranceServiceTest {
         RoomEnterRequest req = new RoomEnterRequest(VALID_NICKNAME, INVALID_PASSWORD);
 
         assertThatThrownBy(() -> entrance.enter(id, req))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(PASSWORD_INCORRECT.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.PASSWORD_INCORRECT.message());
     }
 
     @Test
@@ -93,8 +93,8 @@ class RoomEntranceServiceTest {
         RoomEnterRequest req = new RoomEnterRequest(null, null);
 
         assertThatThrownBy(() -> entrance.enter(id, req))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(NICKNAME_NULL.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.NICKNAME_NULL.message());
     }
 
     @Test
@@ -104,8 +104,8 @@ class RoomEntranceServiceTest {
         RoomEnterRequest req = new RoomEnterRequest("   ", null);
 
         assertThatThrownBy(() -> entrance.enter(id, req))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(NICKNAME_BLANK.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.NICKNAME_BLANK.message());
     }
 
     @Test
@@ -115,8 +115,8 @@ class RoomEntranceServiceTest {
         RoomEnterRequest req = new RoomEnterRequest("a".repeat(17), null);
 
         assertThatThrownBy(() -> entrance.enter(id, req))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(NICKNAME_LENGTH_EXCEED.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.NICKNAME_LENGTH_EXCEED.message());
     }
 
     @Test
@@ -127,8 +127,8 @@ class RoomEntranceServiceTest {
         entrance.enter(id, new RoomEnterRequest(VALID_NICKNAME, null));
 
         assertThatThrownBy(() -> entrance.enter(id, new RoomEnterRequest(VALID_NICKNAME, null)))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(NICKNAME_DUPLICATION.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.NICKNAME_DUPLICATION.message());
     }
 
     @Test
@@ -139,8 +139,8 @@ class RoomEntranceServiceTest {
         entrance.enter(id, new RoomEnterRequest(VALID_NICKNAME + 1, null));
 
         assertThatThrownBy(() -> entrance.enter(id, new RoomEnterRequest(VALID_NICKNAME + 2, null)))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ROOM_FULL.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.ROOM_FULL.message());
     }
 
     @Test

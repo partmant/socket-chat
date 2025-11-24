@@ -5,17 +5,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
+import com.example.socketchatbackend.exception.CustomException;
+import com.example.socketchatbackend.exception.ErrorCode;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.example.socketchatbackend.dto.chat.message.RoomMessageRequest;
 import com.example.socketchatbackend.dto.chat.message.RoomMessageResponse;
 import com.example.socketchatbackend.dto.chat.message.MessageType;
-import com.example.socketchatbackend.exception.chat.ErrorMessages;
 import com.example.socketchatbackend.repository.chat.RoomMemberRepository;
 import com.example.socketchatbackend.util.ChatConstants;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -94,8 +94,8 @@ class MessageFactoryTest {
         RoomMessageRequest talkReq = new RoomMessageRequest(VALID_ROOM_ID, MessageType.TALK, NON_MEMBER, "Hi");
 
         assertThatThrownBy(() -> messageFactory.createTalkMessage(talkReq))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessages.NICKNAME_NOT_FOUND.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.NICKNAME_NOT_FOUND.message());
     }
 
     @Test
@@ -107,8 +107,8 @@ class MessageFactoryTest {
         RoomMessageRequest enterReq = new RoomMessageRequest(VALID_ROOM_ID, MessageType.ENTER, NON_MEMBER, null);
 
         assertThatThrownBy(() -> messageFactory.createEnterMessage(enterReq))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessages.NICKNAME_NOT_FOUND.getMessage());
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ErrorCode.NICKNAME_NOT_FOUND.message());
 
     }
 }
