@@ -1,4 +1,5 @@
 <script>
+import { USER_ERROR_MESSAGES } from "../UserErrorMessages";
 import api from "../api";
 
 export default {
@@ -14,12 +15,12 @@ export default {
   methods: {
     async createRoom() {
       if (!this.title.trim()) {
-        alert("방 제목을 입력하세요.");
+        alert(USER_ERROR_MESSAGES.TITLE_NULL.message);
         return;
       }
 
       if (this.isPrivate && !this.password.trim()) {
-        alert("비밀번호를 입력해야 합니다.");
+        alert(USER_ERROR_MESSAGES.PASSWORD_BLANK.message);
         return;
       }
 
@@ -35,18 +36,20 @@ export default {
 
         const res = await api.post("/api/rooms", payload);
 
-        this.$emit("created", { 
+        this.$emit("created", {
           roomId: res.data,
-          password: this.isPrivate ? this.password : null
+          password: this.isPrivate ? this.password : null,
         });
 
         this.$emit("close");
       } catch (e) {
-        console.error(e);
-        alert("방 생성에 실패했습니다.");
+        const errorCode = e?.response?.data?.errorCode;
+        const errorInfo = USER_ERROR_MESSAGES[errorCode] || USER_ERROR_MESSAGES.DEFAULT;
+
+        alert(errorInfo.message);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -81,7 +84,7 @@ export default {
       />
 
       <select v-model="maxUserCount" class="input">
-        <option v-for="n in 10" :key="n" :value="n">{{ n }}명</option>
+        <option v-for="n in 9" :key="n + 1" :value="n + 1">{{ n + 1 }}명</option>
       </select>
 
       <div class="actions">

@@ -2,6 +2,7 @@
 import { ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Client } from "@stomp/stompjs";
+import { USER_ERROR_MESSAGES } from "../UserErrorMessages";
 import SockJS from "sockjs-client";
 import api from "../api";
 
@@ -68,6 +69,11 @@ const connect = () => {
 const send = () => {
   if (!client?.active) return;
   if (!message.value.trim()) return;
+
+  if (message.value.length > 200) {
+    alert(USER_ERROR_MESSAGES.MESSAGE_LENGTH_EXCEEDED.message);
+    return;
+  }
 
   client.publish({
     destination: "/app/chat.send",

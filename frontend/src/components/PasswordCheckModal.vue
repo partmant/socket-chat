@@ -1,4 +1,5 @@
 <script>
+import { USER_ERROR_MESSAGES } from "../UserErrorMessages"; 
 import api from "../api";
 
 export default {
@@ -13,19 +14,33 @@ export default {
 
   methods: {
     async verify() {
+      this.error = null; 
+
       if (!this.password.trim()) {
-        this.error = "비밀번호를 입력하세요.";
+        this.error = USER_ERROR_MESSAGES.PASSWORD_BLANK.message;
         return;
       }
 
-      try {
+      try { 
         await api.post(`/api/rooms/${this.room.id}/check-password`, {
           password: this.password,
         });
 
         this.$emit("success", this.password);
       } catch (e) {
-        this.error = "비밀번호가 틀렸습니다.";
+        const errorResponse = e.response;
+
+        if (errorResponse && errorResponse.data) {
+          const errorCode = errorResponse.data.errorCode;
+
+          if (USER_ERROR_MESSAGES[errorCode]) {
+            this.error = USER_ERROR_MESSAGES[errorCode].message;
+          } else {
+            this.error = USER_ERROR_MESSAGES.DEFAULT.message;
+          }
+        } else {
+          this.error = error = USER_ERROR_MESSAGES.DEFAULT.message;
+        }
       }
     },
   },

@@ -1,4 +1,6 @@
 <script>
+import { USER_ERROR_MESSAGES } from "../UserErrorMessages";
+
 export default {
   data() {
     return {
@@ -7,15 +9,22 @@ export default {
   },
   methods: {
     submit() {
-      if (!this.nickname.trim()) {
-        alert("닉네임을 입력하세요.");
+      const value = this.nickname.trim();
+      if (!value) {
+        alert(USER_ERROR_MESSAGES.NICKNAME_BLANK.message);
         return;
       }
-      this.$emit("submit", this.nickname);
+      if (value.length > 16) {
+        alert(USER_ERROR_MESSAGES.NICKNAME_LENGTH_EXCEED.message);
+        return;
+      }
+
+      this.$emit("submit", value);
     }
   }
-}
+};
 </script>
+
 
 <template>
   <div class="overlay" @click.self="$emit('close')">
