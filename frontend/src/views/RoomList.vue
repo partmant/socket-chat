@@ -1,8 +1,12 @@
 <script>
+import { Client } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 import api from "../api";
 import CreateRoomModal from "../components/CreateRoomModal.vue";
 import NicknameModal from "../components/NicknameModal.vue";
 import PasswordCheckModal from "../components/PasswordCheckModal.vue";
+
+let listClient = null;
 
 export default {
   data() {
@@ -11,7 +15,7 @@ export default {
       keyword: "",
       createModal: false,
       nicknameModal: false,
-      selectedRoomId: null, 
+      selectedRoomId: null,
       passwordCheckModal: false,
       selectedPassword: null,
       selectedRoom: null,
@@ -35,12 +39,34 @@ export default {
 
   mounted() {
     this.fetchRooms();
+    this.connectListWebsocket();
+  },
+
+  beforeUnmount() {
+    if (listClient && listClient.connected) {
+      listClient.deactivate();
+    }
   },
 
   methods: {
     async fetchRooms() {
       const res = await api.get("/api/rooms");
       this.rooms = res.data;
+    },
+
+    connectListWebsocket() {
+      listClient = new Client({
+        webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
+        reconnectDelay: 3000,
+
+        onConnect: () => {
+          listClient.subscribe(`/topic/rooms`, () => {
+            this.fetchRooms();  // 목록 갱신
+          });
+        }
+      });
+
+      listClient.activate();
     },
 
     onCreateRoomClick() {
