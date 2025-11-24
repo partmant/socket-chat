@@ -3,6 +3,7 @@ package com.example.socketchatbackend.service.chat.room;
 import static org.assertj.core.api.Assertions.*;
 
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
+import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.example.socketchatbackend.dto.chat.room.RoomCreateRequest;
 import com.example.socketchatbackend.repository.chat.InMemoryRoomRepository;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 class RoomCommandServiceTest {
 
@@ -17,11 +19,18 @@ class RoomCommandServiceTest {
     private static final String VALID_PASSWORD = "1234";
     private static final int VALID_MAX_USER_COUNT = 10;
 
-    private RoomCommandService service;
+    private RoomCommandService commandService;
+    private InMemoryRoomRepository roomRepository;
+    private SimpMessagingTemplate messagingTemplate;
+
 
     @BeforeEach
     void setUp() {
-        service = new RoomCommandService(new InMemoryRoomRepository());
+        roomRepository = new InMemoryRoomRepository();
+
+        messagingTemplate = mock(SimpMessagingTemplate.class);
+
+        commandService = new RoomCommandService(roomRepository, messagingTemplate);
     }
 
     @Test
@@ -30,9 +39,9 @@ class RoomCommandServiceTest {
         RoomCreateRequest req1 = new RoomCreateRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT);
         RoomCreateRequest req2 = new RoomCreateRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT);
 
-        service.create(req1);
+        commandService.create(req1);
 
-        assertThatThrownBy(() -> service.create(req2))
+        assertThatThrownBy(() -> commandService.create(req2))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(TITLE_DUPLICATION.getMessage());
     }
@@ -42,7 +51,7 @@ class RoomCommandServiceTest {
     void 유효한_입력이면_채팅방이_생성되고_ID가_반환된다() {
         RoomCreateRequest req = new RoomCreateRequest(VALID_TITLE, VALID_PASSWORD, VALID_MAX_USER_COUNT);
 
-        Long id = service.create(req);
+        Long id = commandService.create(req);
 
         assertThat(id).isNotNull();
     }

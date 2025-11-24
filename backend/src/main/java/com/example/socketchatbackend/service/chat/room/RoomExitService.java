@@ -2,6 +2,7 @@ package com.example.socketchatbackend.service.chat.room;
 
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.example.socketchatbackend.domain.chat.vo.RoomNickname;
@@ -18,13 +19,16 @@ public class RoomExitService {
     private final RoomRepository roomRepository;
     private final RoomMemberRepository memberRepository;
     private final MessageService messageService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public RoomExitService(RoomRepository roomRepository,
                            RoomMemberRepository memberRepository,
-                           MessageService messageService) {
+                           MessageService messageService,
+                           SimpMessagingTemplate messagingTemplate) {
         this.roomRepository = roomRepository;
         this.memberRepository = memberRepository;
         this.messageService = messageService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public void exit(Long roomId, RoomExitRequest request) {
@@ -43,6 +47,8 @@ public class RoomExitService {
         messageService.broadcast(exitRequest);
 
         memberRepository.remove(roomId, nickname.value());
+
+        messagingTemplate.convertAndSend("/topic/rooms", "update");
     }
 
     private void validateRoomExists(Long roomId) {

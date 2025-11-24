@@ -6,6 +6,7 @@ import com.example.socketchatbackend.domain.chat.vo.RoomNickname;
 import com.example.socketchatbackend.dto.chat.message.RoomMessageRequest;
 import com.example.socketchatbackend.dto.chat.message.MessageType;
 import com.example.socketchatbackend.service.chat.message.MessageService;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.example.socketchatbackend.domain.chat.Room;
@@ -19,13 +20,16 @@ public class RoomEntranceService {
     private final RoomRepository roomRepository;
     private final RoomMemberRepository memberRepository;
     private final MessageService messageService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public RoomEntranceService(RoomRepository roomRepository,
                                RoomMemberRepository memberRepository,
-                               MessageService messageService) {
+                               MessageService messageService,
+                               SimpMessagingTemplate messagingTemplate) {
         this.roomRepository = roomRepository;
         this.memberRepository = memberRepository;
         this.messageService = messageService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public void enter(Long roomId, RoomEnterRequest request) {
@@ -41,14 +45,16 @@ public class RoomEntranceService {
         // 4. 저장소에 입장 처리
         memberRepository.add(roomId, nickname.value());
 
-        // 5. 입장 WebSocket 메시지 전송
+        // 5. 방 목록 갱신
+        messagingTemplate.convertAndSend("/topic/rooms", "update");
+
+        // 6. 입장 WebSocket 메시지 전송
         RoomMessageRequest enterRequest = new RoomMessageRequest(
                 roomId,
                 MessageType.ENTER,
                 nickname.value(),
                 null
         );
-
         messageService.broadcast(enterRequest);
     }
 

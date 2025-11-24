@@ -2,6 +2,7 @@ package com.example.socketchatbackend.service.chat.room;
 
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.example.socketchatbackend.domain.chat.Room;
@@ -15,9 +16,12 @@ import com.example.socketchatbackend.repository.chat.RoomRepository;
 public class RoomCommandService {
 
     private final RoomRepository roomRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    public RoomCommandService(RoomRepository roomRepository) {
+    public RoomCommandService(RoomRepository roomRepository,
+                              SimpMessagingTemplate messagingTemplate) {
         this.roomRepository = roomRepository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public Long create(RoomCreateRequest request) {
@@ -30,6 +34,9 @@ public class RoomCommandService {
         Room room = Room.of(title, password, capacity);
 
         Room saved = roomRepository.save(room);
+
+        messagingTemplate.convertAndSend("/topic/rooms", "update");
+
         return saved.id();
     }
 

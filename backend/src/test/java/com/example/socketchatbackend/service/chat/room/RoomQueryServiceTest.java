@@ -3,6 +3,7 @@ package com.example.socketchatbackend.service.chat.room;
 import static org.assertj.core.api.Assertions.*;
 
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
+import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import com.example.socketchatbackend.dto.chat.room.RoomCreateRequest;
 import com.example.socketchatbackend.dto.chat.room.RoomInfoResponse;
 import com.example.socketchatbackend.repository.chat.InMemoryRoomRepository;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 class RoomQueryServiceTest {
 
@@ -32,13 +34,16 @@ class RoomQueryServiceTest {
     private RoomQueryService query;
     private RoomMemberRepository memberRepo;
     private InMemoryRoomRepository roomRepo;
+    private SimpMessagingTemplate messagingTemplate;
 
     @BeforeEach
     void setUp() {
         roomRepo = new InMemoryRoomRepository();
         memberRepo = new InMemoryRoomMemberRepository();
 
-        command = new RoomCommandService(roomRepo);
+        messagingTemplate = mock(SimpMessagingTemplate.class);
+
+        command = new RoomCommandService(roomRepo, messagingTemplate);
         query = new RoomQueryService(roomRepo, memberRepo);
     }
 

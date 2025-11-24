@@ -1,26 +1,29 @@
 package com.example.socketchatbackend.service.chat.room;
 
 import static org.assertj.core.api.Assertions.*;
-import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
 import static org.mockito.Mockito.*;
+
+import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import com.example.socketchatbackend.dto.chat.room.RoomCreateRequest;
 import com.example.socketchatbackend.dto.chat.room.RoomExitRequest;
 import com.example.socketchatbackend.repository.chat.InMemoryRoomMemberRepository;
 import com.example.socketchatbackend.repository.chat.InMemoryRoomRepository;
 import com.example.socketchatbackend.service.chat.message.MessageService;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 class RoomExitServiceTest {
 
-    private RoomExitService exitService;
-    private RoomCommandService commandService;
     private InMemoryRoomRepository roomRepository;
     private InMemoryRoomMemberRepository memberRepository;
+    private RoomExitService exitService;
+    private RoomCommandService commandService;
     private MessageService messageService;
+    private SimpMessagingTemplate messagingTemplate;
 
     private static final String VALID_NICK = "user";
     private static final String VALID_TITLE = "room";
@@ -31,10 +34,17 @@ class RoomExitServiceTest {
     void setUp() {
         roomRepository = new InMemoryRoomRepository();
         memberRepository = new InMemoryRoomMemberRepository();
-        messageService = mock(MessageService.class);
 
-        exitService = new RoomExitService(roomRepository, memberRepository, messageService);
-        commandService = new RoomCommandService(roomRepository);
+        messageService = mock(MessageService.class);
+        messagingTemplate = mock(SimpMessagingTemplate.class);
+
+        exitService = new RoomExitService(
+                roomRepository,
+                memberRepository,
+                messageService,
+                messagingTemplate
+        );
+        commandService = new RoomCommandService(roomRepository, messagingTemplate);
     }
 
     @Test

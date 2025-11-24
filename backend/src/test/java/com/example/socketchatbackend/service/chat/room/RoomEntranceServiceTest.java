@@ -1,15 +1,16 @@
 package com.example.socketchatbackend.service.chat.room;
 
+import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
 
 import static com.example.socketchatbackend.exception.chat.ErrorMessages.*;
-import static org.mockito.Mockito.*;
 
-import com.example.socketchatbackend.service.chat.message.MessageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
+import com.example.socketchatbackend.service.chat.message.MessageService;
 import com.example.socketchatbackend.dto.chat.room.RoomCreateRequest;
 import com.example.socketchatbackend.dto.chat.room.RoomEnterRequest;
 import com.example.socketchatbackend.repository.chat.InMemoryRoomMemberRepository;
@@ -29,17 +30,19 @@ class RoomEntranceServiceTest {
     private RoomEntranceService entrance;
     private InMemoryRoomMemberRepository memberRepo;
     private InMemoryRoomRepository roomRepo;
+    private SimpMessagingTemplate messagingTemplate;
 
     @BeforeEach
     void setUp() {
         memberRepo = new InMemoryRoomMemberRepository();
         roomRepo = new InMemoryRoomRepository();
 
-        command = new RoomCommandService(roomRepo);
-
         messageService = mock(MessageService.class);
+        messagingTemplate = mock(SimpMessagingTemplate.class);
 
-        entrance = new RoomEntranceService(roomRepo, memberRepo, messageService);
+        command = new RoomCommandService(roomRepo, messagingTemplate);
+
+        entrance = new RoomEntranceService(roomRepo, memberRepo, messageService, messagingTemplate);
     }
 
     @Test
