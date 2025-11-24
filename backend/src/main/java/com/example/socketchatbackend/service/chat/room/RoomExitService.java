@@ -43,10 +43,18 @@ public class RoomExitService {
                 nickname.value(),
                 null
         );
-
         messageService.broadcast(exitRequest);
 
         memberRepository.remove(roomId, nickname.value());
+
+        int count = memberRepository.count(roomId);
+        if (count == 0) {
+            roomRepository.delete(roomId);
+
+            messagingTemplate.convertAndSend("/topic/rooms", "update");
+
+            return;
+        }
 
         messagingTemplate.convertAndSend("/topic/rooms", "update");
     }

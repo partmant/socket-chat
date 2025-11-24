@@ -8,6 +8,7 @@ import com.example.socketchatbackend.domain.chat.vo.RoomTitle;
 
 public interface RoomRepository {
     Room save(Room room);
+    void delete(Long id);
     Optional<Room> findById(Long id);
     List<Room> findAll();
     boolean existsByTitle(RoomTitle title);
